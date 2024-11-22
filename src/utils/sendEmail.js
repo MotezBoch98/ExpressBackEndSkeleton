@@ -1,20 +1,25 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
 
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-});
+dotenv.config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-export const sendVerificationEmail = async (user) => {
-    const link = `http://localhost:3000/verify-email?token=${user._id}`;
-    await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: user.email,
-        subject: 'Verify your email',
-        text: `Please verify your email by clicking on the link: ${link}`,
-    });
+
+export const sendEmail = async (to, subject, text) => {
+    const msg = {
+        to,
+        from: process.env.EMAIL_FROM, // Ensure this email is verified with SendGrid
+        subject,
+        text,
+    };
+
+    try {
+        await sgMail.send(msg);
+        console.log('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email:', error.response?.body?.errors || error.message);
+        throw new Error('Failed to send email');
+    }
 };
+
+
