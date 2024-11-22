@@ -5,12 +5,12 @@ dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
-export const sendEmail = async (to, subject, text) => {
+export const sendEmail = async (to, subject, htmlContent) => {
     const msg = {
         to,
         from: process.env.EMAIL_FROM, // Ensure this email is verified with SendGrid
         subject,
-        text,
+        html: htmlContent,
     };
 
     try {

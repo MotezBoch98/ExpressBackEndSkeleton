@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, requestPasswordReset, resetPassword, generateOTP, verifyOTP } from '../controllers/authController.js';
+import { register, login, requestPasswordReset, resetPassword, generateOTP, verifyOTP, verifyEmail } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -29,6 +29,27 @@ const router = express.Router();
  */
 
 router.post('/signup', register);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     summary: Verify a user's email address
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         description: The verification token sent to the user's email
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.get('/verify-email', verifyEmail);
+
 /**
  * @swagger
  * /api/auth/login:

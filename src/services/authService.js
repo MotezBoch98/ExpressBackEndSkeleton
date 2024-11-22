@@ -6,33 +6,33 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import otpGenerator from 'otp-generator';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 export const registerUser = async ({ name, email, password }) => {
-    // Check for existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) throw new Error('Email already in use');
 
-    // Create new user
     const user = new User({ name, email, password });
     await user.save();
 
-    // Generate and hash token
-    const token = crypto.randomBytes(32).toString('hex');
-    const hashedToken = await bcrypt.hash(token, 10);
-
-    // Save the hashed token
-    await new EmailVerificationToken({ userId: user._id, token: hashedToken }).save();
+    // Generate a JWT for email verification
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     // Generate verification link
-    const verificationLink = `${process.env.BASE_URL}/verify-email?token=${token}`;
+    const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${token}`;
+    const emailContent = `
+    <div>
+        <p>Hi ${name},</p>
+        <p>Thank you for registering. Please verify your email by clicking the link below:</p>
+        <a href="${verificationLink}" target="_blank" style="color:blue; text-decoration:underline;">Verify Email</a>
+        <p>If you did not request this, please ignore this email.</p>
+    </div>
+`;
 
-    // Send verification email
-    await sendEmail(
-        user.email,
-        'Verify Your Email',
-        `Click the link to verify your email: ${verificationLink}`
-    );
+    await sendEmail(user.email, 'Verify Your Email', emailContent);
 
     return { id: user._id, email: user.email };
 };
@@ -40,11 +40,21 @@ export const registerUser = async ({ name, email, password }) => {
 
 export const loginUser = async ({ email, password }) => {
     const user = await User.findOne({ email });
+
+    // Check if user exists
     if (!user || !(await bcrypt.compare(password, user.password))) {
         throw new Error('Invalid credentials');
     }
+
+    // Check if email is verified
+    if (!user.isVerified) {
+        throw new Error('Email is not verified. Please check your inbox and verify your account.');
+    }
+
+    // Generate and return the JWT token
     return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
+
 
 export const requestPasswordReset = async (email) => {
     const user = await User.findOne({ email });

@@ -1,6 +1,7 @@
 import * as authService from '../services/authService.js';
-import EmailVerificationToken from '../models/EmailVerificationToken.js';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+
 
 /**
  * Registers a new user.
@@ -51,30 +52,29 @@ export const verifyEmail = async (req, res) => {
     try {
         const { token } = req.query;
 
-        // Find the verification token in the database
-        const verificationToken = await EmailVerificationToken.findOne({ token });
-        if (!verificationToken) {
-            throw new Error('Invalid or expired token');
-        }
+        // Verify and decode the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
 
         // Find the user and verify their email
-        const user = await User.findById(verificationToken.userId);
+        const user = await User.findById(userId);
         if (!user) {
             throw new Error('User not found');
         }
 
-        // Mark the user as verified
+        if (user.isVerified) {
+            return res.status(400).json({ success: false, message: 'Email is already verified' });
+        }
+
         user.isVerified = true;
         await user.save();
-
-        // Delete the token to prevent reuse
-        await verificationToken.deleteOne();
 
         res.status(200).json({ success: true, message: 'Email verified successfully' });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
 
 export const generateOTP = async (req, res) => {
     try {
