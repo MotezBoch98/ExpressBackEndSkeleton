@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-
 export const sendEmail = async (to, subject, htmlContent) => {
     const msg = {
         to,
@@ -14,6 +13,7 @@ export const sendEmail = async (to, subject, htmlContent) => {
     };
 
     try {
+        console.log(`Sending email to: ${to}, subject: ${subject}`);
         await sgMail.send(msg);
         console.log('Email sent successfully');
     } catch (error) {
