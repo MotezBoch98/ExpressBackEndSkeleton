@@ -1,125 +1,163 @@
 import User from '../models/User.js';
-import Otp from '../models/Otp.js';
+import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/JWT.js';
 import { sendEmail } from '../utils/sendEmail.js';
+import {
+    createVerificationEmailTemplate,
+    createPasswordResetTemplate,
+} from '../utils/emailTemplates.js';
+import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import otpGenerator from 'otp-generator';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const registerUser = async ({ name, email, password }) => {
-    console.log('Registering user:', email);
-    const existingUser = await User.findOne({ email });
-    if (existingUser) throw new Error('Email already in use');
+    if (await User.exists({ email })) throw new Error('Email already registered');
 
-    const user = new User({ name, email, password });
-    await user.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        isVerified: false,
+    });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${token}`;
-    const emailContent = `
-    <div>
-        <p>Hi ${name},</p>
-        <p>Thank you for registering. Please verify your email by clicking the link below:</p>
-        <a href="${verificationLink}" target="_blank" style="color:blue; text-decoration:underline;">Verify Email</a>
-        <p>If you did not request this, please ignore this email.</p>
-    </div>
-`;
+    const verificationToken = generateToken({ userId: newUser._id }, TOKEN_TYPES.VERIFY);
+    console.log(verificationToken);
+    const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${verificationToken}`;
+    const emailContent = createVerificationEmailTemplate(name, verificationLink);
+    console.log(emailContent);
 
-    await sendEmail(user.email, 'Verify Your Email', emailContent);
-    console.log('User registered successfully:', email);
-
-    return { id: user._id, email: user.email };
-};
-
-export const loginUser = async ({ email, password }) => {
-    console.log('Logging in user:', email);
-    const user = await User.findOne({ email });
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        throw new Error('Invalid credentials');
-    }
-
-    if (!user.isVerified) {
-        throw new Error('Email is not verified. Please check your inbox and verify your account.');
-    }
-
-    console.log('User logged in successfully:', email);
-    return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-};
-
-export const requestPasswordReset = async (email, token) => {
     try {
-        console.log('Requesting password reset for:', email);
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findOne({ email });
-        if (!user) throw new Error('User not found');
-
-        const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        const resetLink = `http://localhost:5000/reset-password?token=${resetToken}`;
-        await sendEmail(user.email, 'Password Reset Request', `Click the link to reset your password: ${resetLink}`);
-        console.log('Password reset email sent:', email);
+        await sendEmail(email, 'Verify Your Email', emailContent);
     } catch (error) {
-        console.error('Error requesting password reset:', error.message);
-        throw new Error('Invalid token');
+        logger.error(`Error sending verification email: ${error.message}`);
+    }
+
+    return { id: newUser._id, email: newUser.email };
+};
+export const loginUser = async ({ email, password }) => {
+    try {
+        console.log('Login attempt:', { email, password });
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            console.log('User not found');
+            return { success: false, message: 'Email not found' };
+        }
+
+        console.log('Stored hashed password:', user.password);
+
+        const isValidPassword = await bcrypt.compare(password.trim(), user.password);
+        console.log('Password valid:', isValidPassword);
+
+        if (!isValidPassword) {
+            return { success: false, message: 'Invalid password' };
+        }
+
+        if (!user.isVerified) {
+            return { success: false, message: 'Please verify your email before logging in' };
+        }
+
+        const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
+        const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
+
+        return { success: true, token, refreshToken };
+    } catch (error) {
+        console.error('Login error:', error.message);
+        return { success: false, message: error.message };
+    }
+};
+
+// export const loginUser = async ({ email, password }) => {
+//     try {
+//         // Fetch the user from the database
+//         const user = await User.findOne({ email: 'motazbouchhiwa@gmail.com' });
+//         console.log('Stored Password (Hashed):', user.password);
+
+//         // Hash a sample password to compare
+//         const testPassword = 'Password123';
+//         const isMatch = await bcrypt.compare(testPassword, user.password);
+//         console.log('Password Match:', isMatch);
+
+//         if (!user) {
+//             return { success: false, message: 'Email not found' };
+//         }
+
+//         const isValidPassword = await bcrypt.compare(password, user.password);
+//         if (!isValidPassword) {
+//             return { success: false, message: 'Invalid password' };
+//         }
+
+//         if (!user.isVerified) {
+//             return { success: false, message: 'Please verify your email before logging in' };
+//         }
+
+//         const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
+//         const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
+//         return { success: true, token };
+//     } catch (error) {
+//         return { success: false, message: error.message };
+//     }
+// };
+
+export const requestPasswordReset = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) return;
+
+    const resetToken = generateToken({ userId: user._id }, TOKEN_TYPES.RESET);
+    const resetLink = `${process.env.BASE_URL}/api/auth/reset-password?token=${resetToken}`;
+    const emailContent = createPasswordResetTemplate(user.name, resetLink);
+
+    try {
+        await sendEmail(email, 'Password Reset Request', emailContent);
+    } catch (error) {
+        logger.error(`Error sending password reset email: ${error.message}`);
     }
 };
 
 export const resetPassword = async (token, newPassword) => {
     try {
-        console.log('Resetting password with token:', token);
-        const decoded = jwt.verify(token, process.env.JWT_RESET_SECRET);
-        const userId = decoded.id;
+        if (!token) {
+            throw new Error('Token is missing');
+        }
 
-        const user = await User.findById(userId);
-        if (!user) throw new Error('User not found');
+        const decoded = verifyToken(token, TOKEN_TYPES.RESET);
 
-        user.password = newPassword;
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10); // Securely hash the new password
         await user.save();
-        console.log('Password reset successfully for user:', user.email);
     } catch (error) {
-        console.error('Error resetting password:', error.message);
-        throw new Error('Invalid or expired token');
+        throw error;
     }
 };
 
-export const generateOTP = async (userId) => {
-    console.log('Generating OTP for user:', userId);
-    const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false });
-    const user = await User.findById(userId);
+
+export const verifyEmail = async (token) => {
+    // Decode the token and verify its type
+    const decoded = verifyToken(token, TOKEN_TYPES.VERIFY);
+    console.log(decoded);
+    if (!decoded) throw new Error('Invalid or expired token');
+
+    // Find the user by the ID embedded in the token
+    const user = await User.findById(decoded.userId);
     if (!user) throw new Error('User not found');
 
-    const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+    // Check if the user's email is already verified
+    if (user.isVerified) throw new Error('Email already verified');
 
-    // Save OTP to the database
-    await Otp.create({ userId, otp, otpExpiry });
+    // Mark the user's email as verified
+    user.isVerified = true;
 
-    await sendEmail(user.email, 'Your OTP', `Your OTP is: ${otp}`);
-    console.log('OTP generated and sent to email:', user.email);
+    // Save the updated user object to the database
+    await user.save();
 };
 
-export const verifyOTP = async (userId, otp) => {
-    console.log('Verifying OTP for user:', userId);
-    const user = await User.findById(userId);
-    if (!user) {
-        console.error('User not found');
-        throw new Error('User not found');
+export const validateResetToken = (token) => {
+    if (!token) {
+        throw new Error('Token is missing');
     }
-
-    const otpRecord = await Otp.findOne({ userId, otp });
-    if (!otpRecord) {
-        console.error('Invalid OTP');
-        throw new Error('Invalid OTP');
-    }
-
-    if (otpRecord.otpExpiry < Date.now()) {
-        console.error('Expired OTP');
-        throw new Error('Expired OTP');
-    }
-
-    // Delete OTP record after verification
-    await Otp.deleteOne({ _id: otpRecord._id });
-
-    console.log('OTP verified successfully for user:', user.email);
+    console.log('Validating reset token:', token);
+    return verifyToken(token, TOKEN_TYPES.RESET);
 };

@@ -1,5 +1,6 @@
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
+import logger from '../config/logger.js';
 
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -13,13 +14,11 @@ export const sendEmail = async (to, subject, htmlContent) => {
     };
 
     try {
-        console.log(`Sending email to: ${to}, subject: ${subject}`);
+        logger.info(`Sending email to: ${to}, subject: ${subject}`);
         await sgMail.send(msg);
-        console.log('Email sent successfully');
+        logger.info('Email sent successfully');
     } catch (error) {
-        console.error('Error sending email:', error.response?.body?.errors || error.message);
+        logger.error(`Error sending email: ${error.response?.body?.errors || error.message}`);
         throw new Error('Failed to send email');
     }
 };
-
-

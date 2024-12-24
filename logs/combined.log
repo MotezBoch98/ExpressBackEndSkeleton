@@ -1,0 +1,459 @@
+2024-12-02T23:19:25.589Z info: GET /api-docs/
+2024-12-02T23:19:25.772Z info: GET /api-docs/swagger-ui.css
+2024-12-02T23:19:25.784Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-02T23:19:25.791Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-02T23:19:25.798Z info: GET /api-docs/swagger-ui-init.js
+2024-12-02T23:19:26.557Z info: GET /api-docs/favicon-32x32.png
+2024-12-02T23:19:42.586Z info: POST /api/auth/signup
+2024-12-02T23:19:42.635Z info: Registering user: Bouchhioua
+2024-12-02T23:19:42.834Z info: Sending email to: Bouchhioua, subject: Verify Your Email
+2024-12-02T23:19:44.688Z error: Error sending email: [object Object]
+2024-12-02T23:19:44.689Z error: Error registering user: Failed to send email
+2024-12-02T23:21:36.214Z info: POST /api/auth/signup
+2024-12-02T23:21:36.217Z info: Registering user: motazbouchhiwa@gmail.com
+2024-12-02T23:21:36.349Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-02T23:21:37.186Z info: Email sent successfully
+2024-12-02T23:21:56.780Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNDEwMDQxMzZmZjNlZWEwN2MwN2MiLCJpYXQiOjE3MzMxODE2OTYsImV4cCI6MTczMzI2ODA5Nn0._rUQBYK4nbZkLgUCJDNcoetPJ-5cW2vt2zqqaIB5Q_0
+2024-12-02T23:21:56.781Z info: Verifying email with token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNDEwMDQxMzZmZjNlZWEwN2MwN2MiLCJpYXQiOjE3MzMxODE2OTYsImV4cCI6MTczMzI2ODA5Nn0._rUQBYK4nbZkLgUCJDNcoetPJ-5cW2vt2zqqaIB5Q_0
+2024-12-02T23:21:56.810Z info: Email verified successfully for user: motazbouchhiwa@gmail.com
+2024-12-02T23:25:24.027Z info: POST /api/auth/login
+2024-12-02T23:25:24.035Z info: Logging in user: motazbouchhiwa@gmail.com
+2024-12-02T23:26:00.315Z info: POST /api/auth/request-password-reset
+2024-12-02T23:26:00.317Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-02T23:26:00.326Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-02T23:26:01.187Z info: Email sent successfully
+2024-12-02T23:26:01.187Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-02T23:26:16.377Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MTk2MCwiZXhwIjoxNzMzMTg1NTYwfQ.iiTpqIz96dItpa7GwDN_6y_Rdh_x4x_qIXDA2zO_KJs
+2024-12-02T23:28:24.405Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MTk2MCwiZXhwIjoxNzMzMTg1NTYwfQ.iiTpqIz96dItpa7GwDN_6y_Rdh_x4x_qIXDA2zO_KJs
+2024-12-02T23:29:00.948Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MTk2MCwiZXhwIjoxNzMzMTg1NTYwfQ.iiTpqIz96dItpa7GwDN_6y_Rdh_x4x_qIXDA2zO_KJs
+2024-12-02T23:29:00.960Z info: Resetting password with token: undefined
+2024-12-02T23:29:00.961Z error: Error resetting password: jwt must be provided
+2024-12-02T23:29:10.944Z info: POST /api/auth/request-password-reset
+2024-12-02T23:29:10.976Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-02T23:29:11.017Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-02T23:29:12.117Z info: Email sent successfully
+2024-12-02T23:29:12.119Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-02T23:29:28.752Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-02T23:29:37.679Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-02T23:29:37.682Z info: Resetting password with token: undefined
+2024-12-02T23:29:37.682Z error: Error resetting password: jwt must be provided
+2024-12-02T23:49:45.999Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-02T23:52:30.852Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-02T23:54:04.520Z info: POST /api/auth/reset-password
+2024-12-02T23:54:04.559Z info: Resetting password with token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-02T23:54:04.812Z info: Password reset successfully for user: motazbouchhiwa@gmail.com
+2024-12-03T00:02:09.491Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4MjE1MSwiZXhwIjoxNzMzMTg1NzUxfQ.VyGMR0Ao6K73mwPyLkSLYCfGlXA1_PM7OcYgyLKe208
+2024-12-03T00:02:23.835Z info: POST /api/auth/request-password-reset
+2024-12-03T00:02:23.863Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-03T00:02:23.902Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T00:02:24.853Z info: Email sent successfully
+2024-12-03T00:02:24.854Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-03T00:02:49.797Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NDE0MywiZXhwIjoxNzMzMTg3NzQzfQ.9NOb8ncewA8RSLG-3nwkoQHmWkyb9t_1jZGN7PqtDwU
+2024-12-03T00:03:07.864Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NDE0MywiZXhwIjoxNzMzMTg3NzQzfQ.9NOb8ncewA8RSLG-3nwkoQHmWkyb9t_1jZGN7PqtDwU
+2024-12-03T00:03:07.996Z info: GET /favicon.ico
+2024-12-03T00:03:17.575Z info: POST /api/auth/reset-password
+2024-12-03T00:03:17.576Z info: Resetting password with token: undefined
+2024-12-03T00:03:17.578Z info: Resetting password with token: undefined
+2024-12-03T00:03:17.583Z error: Error resetting password: jwt must be provided
+2024-12-03T00:03:17.585Z error: Error resetting password: Invalid or expired token
+2024-12-03T00:11:54.019Z info: GET /api-docs/
+2024-12-03T00:11:54.161Z info: GET /api-docs/swagger-ui.css
+2024-12-03T00:11:54.170Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-03T00:11:54.177Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-03T00:11:54.182Z info: GET /api-docs/swagger-ui-init.js
+2024-12-03T00:11:54.788Z info: GET /api-docs/favicon-32x32.png
+2024-12-03T00:12:39.229Z info: POST /api/auth/request-password-reset
+2024-12-03T00:12:39.268Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-03T00:12:39.302Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T00:12:45.026Z info: Email sent successfully
+2024-12-03T00:12:45.027Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-03T00:12:58.445Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NDc1OSwiZXhwIjoxNzMzMTg4MzU5fQ.O33jFuPbyX3MdWjT9vw4ujetAuLmIjuD1GULhtcoP6c
+2024-12-03T00:13:28.402Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NDc1OSwiZXhwIjoxNzMzMTg4MzU5fQ.O33jFuPbyX3MdWjT9vw4ujetAuLmIjuD1GULhtcoP6c
+2024-12-03T00:16:50.863Z info: POST /api/auth/request-password-reset
+2024-12-03T00:16:50.900Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-03T00:16:50.942Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T00:16:51.941Z info: Email sent successfully
+2024-12-03T00:16:51.942Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-03T00:17:02.389Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NTAxMCwiZXhwIjoxNzMzMTg4NjEwfQ.NjbZhih7TwNT-Sv2fiA0zJLCEl-zjP0gB5YkFeZfZv0
+2024-12-03T00:17:14.838Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NTAxMCwiZXhwIjoxNzMzMTg4NjEwfQ.NjbZhih7TwNT-Sv2fiA0zJLCEl-zjP0gB5YkFeZfZv0
+2024-12-03T00:17:21.872Z info: POST /api/auth/reset-password
+2024-12-03T00:17:21.881Z info: Resetting password with token: undefined
+2024-12-03T00:17:21.883Z info: Resetting password with token: undefined
+2024-12-03T00:17:21.890Z error: Error resetting password: jwt must be provided
+2024-12-03T00:17:21.893Z error: Error resetting password: Invalid or expired token
+2024-12-03T00:20:39.437Z info: POST /api/auth/request-password-reset
+2024-12-03T00:20:39.485Z info: Requesting password reset for: motazbouchhiwa@gmail.com
+2024-12-03T00:20:39.542Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T00:20:40.667Z info: Email sent successfully
+2024-12-03T00:20:40.668Z info: Password reset email sent: motazbouchhiwa@gmail.com
+2024-12-03T00:20:51.994Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NGU0MTAwNDEzNmZmM2VlYTA3YzA3YyIsImlhdCI6MTczMzE4NTIzOSwiZXhwIjoxNzMzMTg4ODM5fQ.QMgJyLxIlz5nF5mS20EQxe8XSGF6jWt1LQmcflpkhr4
+2024-12-03T00:31:19.001Z info: POST /api/auth/request-password-reset
+2024-12-03T00:59:00.430Z info: GET /api-docs/
+2024-12-03T00:59:00.545Z info: GET /api-docs/swagger-ui.css
+2024-12-03T00:59:00.553Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-03T00:59:00.559Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-03T00:59:00.562Z info: GET /api-docs/swagger-ui-init.js
+2024-12-03T00:59:01.073Z info: GET /api-docs/favicon-32x32.png
+2024-12-03T01:00:43.406Z info: POST /api/auth/signup
+2024-12-03T01:00:43.468Z info: Registering user: motazbouchhiwa@gmail.com
+2024-12-03T01:33:31.209Z info: POST /api/auth/signup
+2024-12-03T01:33:31.246Z info: Registering user: motazbouchhiwa@gmail.com
+2024-12-03T01:33:31.414Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-03T01:33:33.347Z info: Email sent successfully
+2024-12-03T01:33:33.347Z info: Verification email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:34:15.552Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoidmVyaWZpY2F0aW9uIiwiaWF0IjoxNzMzMTg5NjExLCJleHAiOjE3MzMyNzYwMTF9.XO2YjL4AqYI_jxEGo3HIDUsfEaln1377IZDMfIHaUdU
+2024-12-03T01:35:27.333Z info: POST /api/auth/login
+2024-12-03T01:35:27.344Z info: Login attempt: mptazbouchhiwa@gmail.com
+2024-12-03T01:35:55.114Z info: POST /api/auth/login
+2024-12-03T01:35:55.116Z info: Login attempt: motazbouchhiwa@gmail.com
+2024-12-03T01:40:49.877Z info: POST /api/auth/login
+2024-12-03T01:40:49.924Z info: Login attempt: motazbouchhiwa@gmail.com
+2024-12-03T01:42:13.184Z info: POST /api/auth/request-password-reset
+2024-12-03T01:42:13.266Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T01:42:14.332Z info: Email sent successfully
+2024-12-03T01:42:14.333Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:42:30.849Z info: GET /reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTAxMzMsImV4cCI6MTczMzE5MzczM30._cNCDqndOMe9Zup3HJ-mpss1AR44cFpxe0DHFiLLoIs
+2024-12-03T01:42:46.466Z info: GET /api/authreset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTAxMzMsImV4cCI6MTczMzE5MzczM30._cNCDqndOMe9Zup3HJ-mpss1AR44cFpxe0DHFiLLoIs
+2024-12-03T01:42:52.492Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTAxMzMsImV4cCI6MTczMzE5MzczM30._cNCDqndOMe9Zup3HJ-mpss1AR44cFpxe0DHFiLLoIs
+2024-12-03T01:43:21.307Z info: POST /api/auth/reset-password
+2024-12-03T01:46:40.083Z info: POST /api/auth/request-password-reset
+2024-12-03T01:46:40.151Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T01:46:41.203Z info: Email sent successfully
+2024-12-03T01:46:41.204Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:46:51.569Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTA0MDAsImV4cCI6MTczMzE5NDAwMH0.fnaqYRUz0NoGoTqeL4ki9EUQ722VwNQE0eSuWXDdk6U
+2024-12-03T01:46:57.356Z info: POST /api/auth/reset-password
+2024-12-03T01:52:28.243Z info: POST /api/auth/request-password-reset
+2024-12-03T01:52:28.339Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T01:52:29.274Z info: Email sent successfully
+2024-12-03T01:52:29.275Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:53:03.420Z info: POST /api/auth/request-password-reset
+2024-12-03T01:53:03.435Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T01:53:03.860Z info: Email sent successfully
+2024-12-03T01:53:03.861Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:53:16.566Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTA3ODMsImV4cCI6MTczMzE5NDM4M30.QzhA4A-ZVlYkwuk5DQYf-7vOeTwJl85Vx4hlU6-WH-s
+2024-12-03T01:53:27.257Z info: POST /api/auth/reset-password
+2024-12-03T01:53:27.258Z error: Password reset failed: Cannot read properties of undefined (reading 'query')
+2024-12-03T01:59:36.315Z info: POST /api/auth/request-password-reset
+2024-12-03T01:59:36.390Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T01:59:37.403Z info: Email sent successfully
+2024-12-03T01:59:37.404Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T01:59:51.092Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMxOTExNzYsImV4cCI6MTczMzE5NDc3Nn0.J9EWHMzEOEfv5R6IxtJ3w5cin3n77tkZ7BtL-T2IQYA
+2024-12-03T01:59:51.096Z error: Password reset failed: Cannot read properties of undefined (reading 'method')
+2024-12-03T14:35:59.450Z info: GET /api-docs
+2024-12-03T14:35:59.835Z info: GET /api-docs/
+2024-12-03T14:36:00.053Z info: GET /api-docs/swagger-ui.css
+2024-12-03T14:36:00.092Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-03T14:36:00.097Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-03T14:36:00.103Z info: GET /api-docs/swagger-ui-init.js
+2024-12-03T14:36:57.868Z info: POST /api/auth/request-password-reset
+2024-12-03T14:36:57.999Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-03T14:36:59.121Z info: Email sent successfully
+2024-12-03T14:36:59.125Z info: Password reset email sent to: motazbouchhiwa@gmail.com
+2024-12-03T14:37:21.648Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRlNWZlYjdlOTJkZDdlZTJhOWEzMDkiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMyMzY2MTcsImV4cCI6MTczMzI0MDIxN30.1O90307wOFnP_ty0VmjXofbyHVc3k7yxty57HwL8iHw
+2024-12-03T14:37:21.655Z error: Password reset failed: Cannot read properties of undefined (reading 'method')
+2024-12-03T15:11:28.809Z info: GET /api-docs/
+2024-12-03T15:11:28.918Z info: GET /api-docs/swagger-ui.css
+2024-12-03T15:11:28.939Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-03T15:11:28.943Z info: GET /api-docs/swagger-ui-init.js
+2024-12-03T15:11:28.952Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-03T15:11:29.448Z info: GET /api-docs/favicon-32x32.png
+2024-12-04T02:03:58.774Z info: GET /api-docs/
+2024-12-04T02:03:58.879Z info: GET /api-docs/swagger-ui.css
+2024-12-04T02:03:58.904Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-04T02:03:58.912Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-04T02:03:58.915Z info: GET /api-docs/swagger-ui-init.js
+2024-12-04T02:04:21.784Z info: POST /api/auth/signup
+2024-12-04T02:04:21.990Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-04T02:04:22.902Z info: Email sent successfully
+2024-12-04T02:05:14.145Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRmYjhhNWUwZGRkOTk3YTJkNmI3MjIiLCJ0eXBlIjoidmVyaWZpY2F0aW9uIiwiaWF0IjoxNzMzMjc3ODYxLCJleHAiOjE3MzMzNjQyNjF9.zzGK8-66uF5FbZOcknLML3dxwBPjSHVctQls3FWC53w
+2024-12-04T02:06:26.661Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRmYjhhNWUwZGRkOTk3YTJkNmI3MjIiLCJ0eXBlIjoidmVyaWZpY2F0aW9uIiwiaWF0IjoxNzMzMjc3ODYxLCJleHAiOjE3MzMzNjQyNjF9.zzGK8-66uF5FbZOcknLML3dxwBPjSHVctQls3FWC53w
+2024-12-04T02:07:01.921Z info: POST /api/auth/login
+2024-12-04T02:07:54.238Z info: POST /api/auth/request-password-reset
+2024-12-04T02:07:54.246Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-04T02:07:54.912Z info: Email sent successfully
+2024-12-04T02:08:17.870Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRmYjhhNWUwZGRkOTk3YTJkNmI3MjIiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMyNzgwNzQsImV4cCI6MTczMzI4MTY3NH0.MOBUb6caWVkB_o_9ilOhZtyXqJYCR3dT_txqKKdaeH0
+2024-12-04T02:25:28.677Z info: POST /api/auth/request-password-reset
+2024-12-04T02:25:28.746Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-04T02:25:29.664Z info: Email sent successfully
+2024-12-04T02:25:49.076Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzRmYjhhNWUwZGRkOTk3YTJkNmI3MjIiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzMyNzkxMjgsImV4cCI6MTczMzI4MjcyOH0.WxD5szJnd3-w7iNzBERR6s1xwm6-jQm_fZsHmDhHQ-U
+2024-12-10T16:43:49.156Z info: GET /api-docs/
+2024-12-10T16:43:49.282Z info: GET /api-docs/swagger-ui.css
+2024-12-10T16:43:49.320Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-10T16:43:49.334Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-10T16:43:49.340Z info: GET /api-docs/swagger-ui-init.js
+2024-12-10T16:43:49.807Z info: GET /api-docs/favicon-32x32.png
+2024-12-10T16:44:10.807Z info: POST /api/auth/signup
+2024-12-10T16:44:11.058Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-10T16:44:12.702Z info: Email sent successfully
+2024-12-10T16:44:52.324Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoidmVyaWZpY2F0aW9uIiwiaWF0IjoxNzMzODQ5MDUxLCJleHAiOjE3MzM5MzU0NTF9.8ngmfUVSoGQffrEbyTWfpHXByG1rrnYy__TpkVDp7tQ
+2024-12-10T16:45:26.805Z info: POST /api/auth/request-password-reset
+2024-12-10T16:45:26.814Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T16:45:27.294Z info: Email sent successfully
+2024-12-10T16:45:40.801Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzM4NDkxMjYsImV4cCI6MTczMzg1MjcyNn0.nsqPrZSuIzk74k4GcOtDuZqe3YhMaXEsBz6n9vfaVkY
+2024-12-10T17:06:39.121Z info: GET /api-docs/
+2024-12-10T17:06:39.283Z info: GET /api-docs/swagger-ui.css
+2024-12-10T17:06:39.307Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-10T17:06:39.311Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-10T17:06:39.314Z info: GET /api-docs/swagger-ui-init.js
+2024-12-10T17:06:39.799Z info: GET /api-docs/favicon-32x32.png
+2024-12-10T17:06:56.764Z info: POST /api/auth/request-password-reset
+2024-12-10T17:06:56.845Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T17:07:00.120Z info: Email sent successfully
+2024-12-10T17:09:06.059Z info: GET /api/auth/reset-password?token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzM4NTA0MTYsImV4cCI6MTczMzg1NDAxNn0.nmYZylvGq10F7bX1tZ51-7CDC4p92P7GfLE36pFehKo&source=gmail&ust=1733936869595000&usg=AOvVaw3wQG12OShBicFsYmqeH_Oe
+2024-12-10T17:11:54.607Z info: GET /api-docs/
+2024-12-10T17:11:54.765Z info: GET /api-docs/swagger-ui.css
+2024-12-10T17:11:54.782Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-10T17:11:54.785Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-10T17:11:54.793Z info: GET /api-docs/swagger-ui-init.js
+2024-12-10T17:11:55.160Z info: GET /api-docs/favicon-32x32.png
+2024-12-10T17:12:12.986Z info: POST /api/auth/request-password-reset
+2024-12-10T17:12:13.070Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T17:12:24.788Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
+2024-12-10T17:13:13.359Z info: POST /api/auth/request-password-reset
+2024-12-10T17:13:13.383Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T17:13:24.963Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
+2024-12-10T17:21:42.568Z info: POST /api/auth/request-password-reset
+2024-12-10T17:21:42.631Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T17:21:43.729Z info: Email sent successfully
+2024-12-10T17:22:01.531Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzM4NTEzMDIsImV4cCI6MTczMzg1NDkwMn0.cJoIKo_bTxuOQgJzW0-UMBsWr6UQ72loKnbMQIKeX40
+2024-12-10T17:26:03.573Z info: POST /api/auth/request-password-reset
+2024-12-10T17:26:03.658Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-10T17:26:04.418Z info: Email sent successfully
+2024-12-10T17:26:17.586Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzM4NTE1NjMsImV4cCI6MTczMzg1NTE2M30.iSxVFGikfvdz4E6m6k3aVZg6EPJILvkQI9hC9FMx6Eo
+2024-12-16T21:47:31.551Z info: GET /api-docs/
+2024-12-16T21:47:32.940Z info: GET /api-docs/swagger-ui.css
+2024-12-16T21:47:33.754Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-16T21:47:33.760Z info: GET /api-docs/swagger-ui-init.js
+2024-12-16T21:47:33.769Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-16T21:48:04.455Z info: POST /api/auth/request-password-reset
+2024-12-16T21:48:15.040Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-16T21:48:18.836Z info: Email sent successfully
+2024-12-16T21:49:17.580Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzQzODU2OTUsImV4cCI6MTczNDM4OTI5NX0.JO_mLb0_IHFF_fOe21IHh2fnHWH38jSeVuFTtITSSKs
+2024-12-16T21:50:25.840Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzU4NmZkYTc0ZWE4YTU5YTM2MzNjOGEiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3MzQzODU2OTUsImV4cCI6MTczNDM4OTI5NX0.JO_mLb0_IHFF_fOe21IHh2fnHWH38jSeVuFTtITSSKs
+2024-12-19T01:21:18.609Z info: GET /api-docs/
+2024-12-19T01:21:18.712Z info: GET /api-docs/swagger-ui.css
+2024-12-19T01:21:18.716Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-19T01:21:18.724Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-19T01:21:18.726Z info: GET /api-docs/swagger-ui-init.js
+2024-12-19T01:21:19.022Z info: GET /api-docs/favicon-32x32.png
+2024-12-19T01:23:54.950Z info: POST /api/auth/signup
+2024-12-19T01:25:57.323Z info: POST /api/auth/signup
+2024-12-19T02:17:50.429Z info: POST /api/auth/signup
+2024-12-19T02:22:06.410Z info: POST /api/auth/signup
+2024-12-19T02:22:06.715Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-19T02:22:07.832Z info: Email sent successfully
+2024-12-19T02:22:28.421Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ1NzQ5MjYsImV4cCI6MTczNDU3NTgyNn0.gQyIlC2uvkeovXsHGsrdw3FBFBR8fBGzJMZHGjU9LSY
+2024-12-19T02:23:41.057Z info: POST /api/auth/signup
+2024-12-19T02:23:41.307Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-19T02:23:42.326Z info: Email sent successfully
+2024-12-19T02:24:02.794Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ1NzUwMjEsImV4cCI6MTczNDU3NTkyMX0.M3NFmV3HbZPdm1UvZnRf5baJx_NU3KQio4fAc1oum2M
+2024-12-19T02:24:14.949Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQ1NzUwMjEsImV4cCI6MTczNDU3NTkyMX0.M3NFmV3HbZPdm1UvZnRf5baJx_NU3KQio4fAc1oum2M
+2024-12-19T03:13:59.431Z info: POST /api/auth/signup
+2024-12-19T03:17:31.274Z info: POST /api/auth/signup
+2024-12-19T03:18:59.652Z info: POST /api/auth/signup
+2024-12-22T18:46:51.996Z info: GET /api-docs/
+2024-12-22T18:46:52.117Z info: GET /api-docs/swagger-ui.css
+2024-12-22T18:46:52.141Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-22T18:46:52.144Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-22T18:46:52.152Z info: GET /api-docs/swagger-ui-init.js
+2024-12-22T18:47:17.634Z info: POST /api/auth/signup
+2024-12-22T18:49:59.656Z info: POST /api/auth/signup
+2024-12-22T18:50:00.144Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-22T18:50:01.566Z info: Email sent successfully
+2024-12-22T18:50:56.596Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM0MDAsImV4cCI6MTczNDk3OTgwMH0.EeN82ttUzGGVqOIKv-TWfB3tQZaYPZn06jrv6QX1nCc
+2024-12-22T18:51:50.780Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM0MDAsImV4cCI6MTczNDk3OTgwMH0.EeN82ttUzGGVqOIKv-TWfB3tQZaYPZn06jrv6QX1nCc
+2024-12-22T18:52:25.283Z info: POST /api/auth/login
+2024-12-22T18:52:32.168Z info: POST /api/auth/login
+2024-12-22T18:52:32.683Z info: POST /api/auth/login
+2024-12-22T18:52:39.713Z info: POST /api/auth/login
+2024-12-22T18:55:38.076Z info: POST /api/auth/login
+2024-12-22T18:58:53.318Z info: POST /api/auth/request-password-reset
+2024-12-22T18:58:53.345Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T18:58:54.574Z info: Email sent successfully
+2024-12-22T18:59:42.543Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM5MzMsImV4cCI6MTczNDg5NzUzM30.VsFQpA9iTXM9urTBv02ASYM3lpNS1mTHY7U5kg3gzck
+2024-12-22T19:24:14.965Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM5MzMsImV4cCI6MTczNDg5NzUzM30.VsFQpA9iTXM9urTBv02ASYM3lpNS1mTHY7U5kg3gzck
+2024-12-22T19:24:14.969Z info: GET /api/auth/reset-password?token%3DeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM5MzMsImV4cCI6MTczNDg5NzUzM30.VsFQpA9iTXM9urTBv02ASYM3lpNS1mTHY7U5kg3gzck&source=gmail&ust=1734980370458000&usg=AOvVaw3HPzDkkUsOjgX6zgDGnolU
+2024-12-22T19:24:14.976Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM5MzMsImV4cCI6MTczNDg5NzUzM30.VsFQpA9iTXM9urTBv02ASYM3lpNS1mTHY7U5kg3gzck
+2024-12-22T19:24:14.980Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTM5MzMsImV4cCI6MTczNDg5NzUzM30.VsFQpA9iTXM9urTBv02ASYM3lpNS1mTHY7U5kg3gzck
+2024-12-22T19:24:14.994Z info: POST /api/auth/request-password-reset
+2024-12-22T19:24:15.035Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T19:24:29.572Z info: POST /api/auth/request-password-reset
+2024-12-22T19:24:29.641Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T19:24:30.891Z info: Email sent successfully
+2024-12-22T19:24:42.615Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTU0NjksImV4cCI6MTczNDg5OTA2OX0.Ob3zMLM9AHxSYPLxNCg1KFts1gVYPkMSFaz-DpdSzrY
+2024-12-22T19:25:37.401Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTU0NjksImV4cCI6MTczNDg5OTA2OX0.Ob3zMLM9AHxSYPLxNCg1KFts1gVYPkMSFaz-DpdSzrY
+2024-12-22T19:25:59.103Z info: POST /api/auth/reset-password
+2024-12-22T19:39:49.472Z info: POST /api/auth/request-password-reset
+2024-12-22T19:39:49.557Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T19:40:13.875Z info: Email sent successfully
+2024-12-22T19:40:28.908Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTYzODksImV4cCI6MTczNDg5OTk4OX0.5mQhC1fWC3nDZ6TkVcHbQeY_sdv4NFzxFWbr966BuIE
+2024-12-22T19:40:29.095Z info: GET /favicon.ico
+2024-12-22T19:40:41.244Z info: POST /api/auth/reset-password
+2024-12-22T19:42:03.710Z info: POST /api/auth/reset-password
+2024-12-22T19:42:37.211Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTYzODksImV4cCI6MTczNDg5OTk4OX0.5mQhC1fWC3nDZ6TkVcHbQeY_sdv4NFzxFWbr966BuIE
+2024-12-22T19:42:54.895Z info: POST /api/auth/reset-password
+2024-12-22T19:42:58.259Z info: POST /api/auth/reset-password
+2024-12-22T19:43:06.174Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTYzODksImV4cCI6MTczNDg5OTk4OX0.5mQhC1fWC3nDZ6TkVcHbQeY_sdv4NFzxFWbr966BuIE
+2024-12-22T19:43:20.635Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTYzODksImV4cCI6MTczNDg5OTk4OX0.5mQhC1fWC3nDZ6TkVcHbQeY_sdv4NFzxFWbr966BuIE
+2024-12-22T19:43:30.487Z info: POST /api/auth/reset-password
+2024-12-22T20:03:14.760Z info: GET /api-docs/
+2024-12-22T20:03:14.922Z info: GET /api-docs/swagger-ui.css
+2024-12-22T20:03:14.925Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-22T20:03:14.933Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-22T20:03:14.941Z info: GET /api-docs/swagger-ui-init.js
+2024-12-22T20:03:15.511Z info: GET /api-docs/favicon-32x32.png
+2024-12-22T20:04:16.783Z info: POST /api/auth/request-password-reset
+2024-12-22T20:04:16.899Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T20:04:18.158Z info: Email sent successfully
+2024-12-22T20:04:40.125Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTc4NTYsImV4cCI6MTczNDkwMTQ1Nn0.6SD6RLhh1U4c94OUzAhKYMbVukG6NhUJHCLqc8XJp00
+2024-12-22T20:10:59.214Z info: POST /api/auth/request-password-reset
+2024-12-22T20:10:59.260Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T20:11:00.823Z info: Email sent successfully
+2024-12-22T20:11:17.791Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4NWY1NzJkMDI5MTM1OWM3ZGVhN2UiLCJpYXQiOjE3MzQ4OTgyNTksImV4cCI6MTczNDkwMTg1OX0.ruQnP2c2Crr6y6YTCTkoK_pq6kkgSNzzKaF8ajJGKW4
+2024-12-22T22:59:12.340Z info: GET /api-docs/
+2024-12-22T22:59:12.444Z info: GET /api-docs/swagger-ui.css
+2024-12-22T22:59:12.448Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-22T22:59:12.451Z info: GET /api-docs/swagger-ui-init.js
+2024-12-22T22:59:12.454Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-22T22:59:49.034Z info: POST /api/auth/signup
+2024-12-22T22:59:49.319Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-22T22:59:50.428Z info: Email sent successfully
+2024-12-22T23:00:06.130Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MDgzODksImV4cCI6MTczNDk5NDc4OX0.D2AWxajTPxU9RgtjxPcjOGn2D4o8OX1PvA6qW6xSwe8
+2024-12-22T23:00:36.274Z info: POST /api/auth/login
+2024-12-22T23:04:32.094Z info: POST /api/auth/login
+2024-12-22T23:04:45.320Z info: POST /api/auth/login
+2024-12-22T23:08:20.950Z info: POST /api/auth/login
+2024-12-22T23:10:00.651Z info: POST /api/auth/login
+2024-12-22T23:10:04.085Z info: POST /api/auth/login
+2024-12-22T23:10:41.685Z info: POST /api/auth/login
+2024-12-22T23:11:22.563Z info: POST /api/auth/login
+2024-12-22T23:14:21.999Z info: POST /api/auth/login
+2024-12-22T23:14:39.092Z info: POST /api/auth/login
+2024-12-22T23:16:42.685Z info: POST /api/auth/login
+2024-12-22T23:19:10.040Z info: POST /api/auth/login
+2024-12-22T23:19:31.842Z info: POST /api/auth/login
+2024-12-22T23:19:53.314Z info: POST /api/auth/login
+2024-12-22T23:42:39.718Z info: POST /api/auth/request-password-reset
+2024-12-22T23:42:39.766Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T23:42:40.811Z info: Email sent successfully
+2024-12-22T23:42:50.391Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTA5NTksImV4cCI6MTczNDkxNDU1OX0.VVcacvPIfd3IEObcC-yLO7A9an_nmG8vH8e9Di5lcpI
+2024-12-22T23:46:03.643Z info: POST /api/auth/request-password-reset
+2024-12-22T23:46:03.698Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T23:46:04.787Z info: Email sent successfully
+2024-12-22T23:46:13.573Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTExNjMsImV4cCI6MTczNDkxNDc2M30.fPahJucnQsoG7MHYOskVD9HDlRI-_C3QoHGJVhc7Rmo
+2024-12-22T23:49:05.871Z info: POST /api/auth/request-password-reset
+2024-12-22T23:49:05.933Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T23:49:07.088Z info: Email sent successfully
+2024-12-22T23:49:27.875Z info: POST /api/auth/request-password-reset
+2024-12-22T23:49:27.888Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T23:49:28.340Z info: Email sent successfully
+2024-12-22T23:49:39.898Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTEzNjcsImV4cCI6MTczNDkxNDk2N30.HlZk6k26P1vebEAJRARMLVfNKapeCEAIe8BbcpZ5qAU
+2024-12-22T23:49:49.397Z info: POST /api/auth/reset-password
+2024-12-22T23:53:48.890Z info: POST /api/auth/request-password-reset
+2024-12-22T23:53:48.943Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-22T23:53:50.194Z info: Email sent successfully
+2024-12-22T23:54:08.552Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTE2MjgsImV4cCI6MTczNDkxNTIyOH0.RinKd758qQJ5hjPtDgdH7k33EgriMvgwpnb8LJ6etjc
+2024-12-22T23:54:23.986Z info: POST /api/auth/reset-password
+2024-12-23T00:01:35.674Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTE2MjgsImV4cCI6MTczNDkxNTIyOH0.RinKd758qQJ5hjPtDgdH7k33EgriMvgwpnb8LJ6etjc
+2024-12-23T00:03:30.285Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTE2MjgsImV4cCI6MTczNDkxNTIyOH0.RinKd758qQJ5hjPtDgdH7k33EgriMvgwpnb8LJ6etjc
+2024-12-23T00:03:38.567Z info: POST /api/auth/reset-password
+2024-12-23T01:06:37.434Z info: POST /api/auth/request-password-reset
+2024-12-23T01:06:37.486Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-23T01:06:38.654Z info: Email sent successfully
+2024-12-23T01:07:01.298Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTE2MjgsImV4cCI6MTczNDkxNTIyOH0.RinKd758qQJ5hjPtDgdH7k33EgriMvgwpnb8LJ6etjc
+2024-12-23T01:07:31.053Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzQ5MTU5OTcsImV4cCI6MTczNDkxOTU5N30.niZvc60iClcuWbZlGP9fX7apNx_Ndj6QqhyN2J3RmbA
+2024-12-23T01:07:48.953Z info: POST /api/auth/reset-password
+2024-12-23T01:14:27.570Z info: POST /api/auth/login
+2024-12-23T01:16:14.055Z info: POST /api/auth/login
+2024-12-23T01:21:22.375Z info: POST /api/auth/login
+2024-12-23T01:22:23.622Z info: POST /api/auth/login
+2024-12-24T09:56:12.965Z info: GET /api-docs/
+2024-12-24T09:56:13.099Z info: GET /api-docs/swagger-ui.css
+2024-12-24T09:56:13.122Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-24T09:56:13.141Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-24T09:56:13.144Z info: GET /api-docs/swagger-ui-init.js
+2024-12-24T09:56:35.481Z info: POST /api/auth/login
+2024-12-24T09:59:10.687Z info: POST /api/auth/login
+2024-12-24T10:01:19.923Z info: POST /api/auth/login
+2024-12-24T10:01:55.275Z info: POST /api/auth/login
+2024-12-24T10:02:23.046Z info: POST /api/auth/login
+2024-12-24T10:03:03.268Z info: POST /api/auth/request-password-reset
+2024-12-24T10:03:03.309Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T10:03:06.552Z info: Email sent successfully
+2024-12-24T10:04:00.499Z info: POST /api/auth/request-password-reset
+2024-12-24T10:04:00.508Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T10:04:00.903Z info: Email sent successfully
+2024-12-24T10:04:12.757Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzUwMzQ2NDAsImV4cCI6MTczNTAzODI0MH0.Ov2jhcKHVbXbs_cYpwmW6HVY-daCW8WF1heVdCWO5To
+2024-12-24T10:04:12.882Z info: GET /favicon.ico
+2024-12-24T10:04:21.308Z info: POST /api/auth/reset-password
+2024-12-24T10:18:21.717Z info: POST /api/auth/request-password-reset
+2024-12-24T10:18:21.772Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T10:18:24.870Z info: Email sent successfully
+2024-12-24T10:18:44.386Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzUwMzU1MDEsImV4cCI6MTczNTAzOTEwMX0.Tvda18cR3Ah20JJ7xEaEZehWNaTYXQPqlXG4xncs-2Q
+2024-12-24T10:19:05.724Z info: POST /api/auth/reset-password
+2024-12-24T10:46:03.954Z info: POST /api/auth/request-password-reset
+2024-12-24T10:46:04.007Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T10:46:05.897Z info: Email sent successfully
+2024-12-24T10:46:30.446Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzUwMzcxNjQsImV4cCI6MTczNTA0MDc2NH0.i_Avb9NqRyhA36gH-nO3HiSQO7MQqZ4aWdKQruAxchM
+2024-12-24T10:46:46.266Z info: POST /api/auth/reset-password
+2024-12-24T10:47:25.528Z info: POST /api/auth/login
+2024-12-24T10:47:40.249Z info: POST /api/auth/login
+2024-12-24T10:49:28.977Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzY4OTllNTZlMTU1Zjk1OTIwYmI4YzAiLCJpYXQiOjE3MzUwMzcxNjQsImV4cCI6MTczNTA0MDc2NH0.i_Avb9NqRyhA36gH-nO3HiSQO7MQqZ4aWdKQruAxchM
+2024-12-24T10:49:47.049Z info: POST /api/auth/reset-password
+2024-12-24T10:50:14.686Z info: GET /api-docs/
+2024-12-24T10:50:14.794Z info: GET /api-docs/swagger-ui.css
+2024-12-24T10:50:14.796Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-24T10:50:14.798Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-24T10:50:14.805Z info: GET /api-docs/swagger-ui-init.js
+2024-12-24T10:50:42.877Z info: POST /api/auth/login
+2024-12-24T11:00:44.202Z info: POST /api/auth/login
+2024-12-24T11:01:45.381Z info: POST /api/auth/login
+2024-12-24T11:03:30.222Z info: POST /api/auth/signup
+2024-12-24T11:03:30.447Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-24T11:03:32.460Z info: Email sent successfully
+2024-12-24T11:04:15.543Z info: POST /api/auth/login
+2024-12-24T11:05:04.344Z info: POST /api/auth/login
+2024-12-24T11:10:26.196Z info: POST /api/auth/login
+2024-12-24T11:11:40.982Z info: POST /api/auth/login
+2024-12-24T20:51:15.241Z info: POST /api/auth/login
+2024-12-24T20:54:13.958Z info: POST /api/auth/login
+2024-12-24T20:54:13.966Z info: GET /api-docs/
+2024-12-24T20:54:14.143Z info: GET /api-docs/swagger-ui.css
+2024-12-24T20:54:14.146Z info: GET /api-docs/swagger-ui-bundle.js
+2024-12-24T20:54:14.150Z info: GET /api-docs/swagger-ui-standalone-preset.js
+2024-12-24T20:54:14.155Z info: GET /api-docs/swagger-ui-init.js
+2024-12-24T20:54:44.507Z info: POST /api/auth/login
+2024-12-24T21:18:29.530Z info: POST /api/auth/login
+2024-12-24T22:02:25.793Z info: POST /api/auth/login
+2024-12-24T22:02:36.888Z info: POST /api/auth/login
+2024-12-24T22:04:49.461Z info: POST /api/auth/request-password-reset
+2024-12-24T22:04:49.488Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T22:04:55.610Z info: Email sent successfully
+2024-12-24T22:05:19.936Z info: POST /api/auth/request-password-reset
+2024-12-24T22:05:19.946Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T22:05:20.354Z info: Email sent successfully
+2024-12-24T22:05:44.570Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzZhOTUwMmM3YWE0MTNiNjlkMTIwOGIiLCJpYXQiOjE3MzUwNzc5MTksImV4cCI6MTczNTA4MTUxOX0.HgOKeKLCLIRkggyF1DoNxCETkjuVXAWBO-BndcUTZM4
+2024-12-24T22:05:44.762Z info: GET /favicon.ico
+2024-12-24T22:06:57.785Z info: POST /api/auth/reset-password
+2024-12-24T22:07:09.420Z info: POST /api/auth/login
+2024-12-24T22:35:56.738Z info: POST /api/auth/login
+2024-12-24T22:36:56.155Z info: POST /api/auth/login
+2024-12-24T22:37:30.257Z info: POST /api/auth/login
+2024-12-24T22:49:30.801Z info: POST /api/auth/reset-password
+2024-12-24T22:49:40.940Z info: POST /api/auth/login
+2024-12-24T23:06:32.581Z info: POST /api/auth/login
+2024-12-24T23:07:00.533Z info: POST /api/auth/signup
+2024-12-24T23:07:00.670Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-24T23:07:08.084Z info: Email sent successfully
+2024-12-24T23:07:15.567Z info: POST /api/auth/login
+2024-12-24T23:07:29.753Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzZiM2U5NDVmMjU5OWYyNDRmMjY2ZjIiLCJpYXQiOjE3MzUwODE2MjAsImV4cCI6MTczNTE2ODAyMH0.xBVhYcX5rhkAF3D4gIJnESCVO_6iRSfFxro7ot8ZLTk
+2024-12-24T23:07:36.042Z info: POST /api/auth/signup
+2024-12-24T23:07:43.499Z info: POST /api/auth/login
+2024-12-24T23:07:54.949Z info: POST /api/auth/login
+2024-12-24T23:08:03.645Z info: POST /api/auth/request-password-reset
+2024-12-24T23:08:03.656Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T23:08:04.109Z info: Email sent successfully
+2024-12-24T23:08:13.168Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzZiM2U5NDVmMjU5OWYyNDRmMjY2ZjIiLCJpYXQiOjE3MzUwODE2ODMsImV4cCI6MTczNTA4NTI4M30.WCUHZs4EJKl7fEEcmGsBiYSTxiSnbC2oPxBw0RKvS0Q
+2024-12-24T23:08:23.970Z info: POST /api/auth/reset-password
+2024-12-24T23:08:36.613Z info: POST /api/auth/login
+2024-12-24T23:08:44.743Z info: POST /api/auth/login

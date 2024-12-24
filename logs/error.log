@@ -1,0 +1,14 @@
+2024-12-02T23:19:44.688Z error: Error sending email: [object Object]
+2024-12-02T23:19:44.689Z error: Error registering user: Failed to send email
+2024-12-02T23:29:00.961Z error: Error resetting password: jwt must be provided
+2024-12-02T23:29:37.682Z error: Error resetting password: jwt must be provided
+2024-12-03T00:03:17.583Z error: Error resetting password: jwt must be provided
+2024-12-03T00:03:17.585Z error: Error resetting password: Invalid or expired token
+2024-12-03T00:17:21.890Z error: Error resetting password: jwt must be provided
+2024-12-03T00:17:21.893Z error: Error resetting password: Invalid or expired token
+2024-12-03T00:31:19.042Z error: Error requesting password reset: jwt must be a string
+2024-12-03T01:53:27.258Z error: Password reset failed: Cannot read properties of undefined (reading 'query')
+2024-12-03T01:59:51.096Z error: Password reset failed: Cannot read properties of undefined (reading 'method')
+2024-12-03T14:37:21.655Z error: Password reset failed: Cannot read properties of undefined (reading 'method')
+2024-12-10T17:12:24.788Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
+2024-12-10T17:13:24.963Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
