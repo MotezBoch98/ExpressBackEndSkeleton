@@ -1,12 +1,19 @@
 import mongoose from 'mongoose';
+import logger from './logger.js';
 
+/**
+ * Connects to the MongoDB database.
+ * 
+ * @returns {Promise<void>}
+ * @throws {Error} If there is an error during the database connection.
+ */
 const connectDB = async () => {
     try {
-        console.log('Connecting to database...');
+        logger.info('Connecting to database...');
         await mongoose.connect(process.env.DB_URI);
-        console.log('Database connected');
+        logger.info('Database connected');
     } catch (error) {
-        console.error('Database connection failed:', error.message);
+        logger.error('Database connection failed:', { message: error.message });
         process.exit(1);
     }
 };
