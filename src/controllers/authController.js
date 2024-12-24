@@ -1,14 +1,28 @@
 import * as authService from '../services/authService.js';
 
-export const register = async (req, res) => {
-    try {
-        const user = await authService.registerUser(req.body);
-        res.status(201).json({ success: true, data: user });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-};
 
+/**
+ * Registers a new user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing user details.
+ * @param {string} req.body.name - The name of the user.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
+
+/**
+ * Logs in a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing login details.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
 export const login = async (req, res) => {
     try {
         const result = await authService.loginUser(req.body);
@@ -23,7 +37,15 @@ export const login = async (req, res) => {
     }
 };
 
-
+/**
+ * Requests a password reset for a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing the user's email.
+ * @param {string} req.body.email - The email of the user requesting the password reset.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
 export const requestPasswordReset = async (req, res) => {
     try {
         await authService.requestPasswordReset(req.body.email);
@@ -33,6 +55,15 @@ export const requestPasswordReset = async (req, res) => {
     }
 };
 
+/**
+ * Displays the reset password form.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string} req.query.token - The password reset token.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
 export const showResetPasswordForm = async (req, res) => {
     try {
         const token = req.query.token;
@@ -97,6 +128,17 @@ export const showResetPasswordForm = async (req, res) => {
     }
 };
 
+/**
+ * Resets the password for a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing the token and new passwords.
+ * @param {string} req.body.token - The password reset token.
+ * @param {string} req.body.newPassword - The new password.
+ * @param {string} req.body.confirmPassword - The confirmation of the new password.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
 export const resetPassword = async (req, res) => {
     try {
         console.log('Incoming body:', req.body); // Debugging
@@ -117,7 +159,15 @@ export const resetPassword = async (req, res) => {
     }
 };
 
-
+/**
+ * Verifies a user's email.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string} req.query.token - The email verification token.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
 export const verifyEmail = async (req, res) => {
     try {
         await authService.verifyEmail(req.query.token);
