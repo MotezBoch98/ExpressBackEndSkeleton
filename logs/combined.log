@@ -457,3 +457,35 @@
 2024-12-24T23:08:23.970Z info: POST /api/auth/reset-password
 2024-12-24T23:08:36.613Z info: POST /api/auth/login
 2024-12-24T23:08:44.743Z info: POST /api/auth/login
+2024-12-24T23:19:43.057Z info: POST /api/auth/signup
+2024-12-24T23:19:43.087Z info: Registering a new user
+2024-12-24T23:19:43.099Z warn: Email already registered: motazbouchhiwa@gmail.com
+2024-12-24T23:21:28.875Z info: POST /api/auth/signup
+2024-12-24T23:21:28.879Z info: Registering a new user
+2024-12-24T23:21:29.007Z info: User created with ID: 676b41f8ce8c546915b34089
+2024-12-24T23:21:29.013Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Verify Your Email
+2024-12-24T23:21:30.095Z info: Email sent successfully
+2024-12-24T23:21:30.096Z info: Verification email sent to: motazbouchhiwa@gmail.com
+2024-12-24T23:23:07.823Z info: GET /api/auth/verify-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzZiNDFmOGNlOGM1NDY5MTViMzQwODkiLCJpYXQiOjE3MzUwODI0ODksImV4cCI6MTczNTE2ODg4OX0.8uTAY1fEyzeZ7T5TsVnvF3d6f0z1RVCXONEAESaJL0M
+2024-12-24T23:24:40.956Z info: POST /api/auth/login
+2024-12-24T23:26:01.383Z info: POST /api/auth/login
+2024-12-24T23:26:01.411Z info: Login attempt
+2024-12-24T23:26:01.512Z warn: Invalid password attempt
+2024-12-24T23:26:18.042Z info: POST /api/auth/login
+2024-12-24T23:26:18.045Z info: Login attempt
+2024-12-24T23:26:18.178Z info: User logged in successfully
+2024-12-24T23:28:42.851Z info: POST /api/auth/request-password-reset
+2024-12-24T23:28:42.877Z info: Password reset request initiated
+2024-12-24T23:28:42.900Z info: Sending email to: motazbouchhiwa@gmail.com, subject: Password Reset Request
+2024-12-24T23:28:46.759Z info: Email sent successfully
+2024-12-24T23:28:46.760Z info: Password reset email sent
+2024-12-24T23:29:12.720Z info: GET /api/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzZiNDFmOGNlOGM1NDY5MTViMzQwODkiLCJpYXQiOjE3MzUwODI5MjIsImV4cCI6MTczNTA4NjUyMn0.pF8Yo8okm5QqF-mnJ4v2X_xKCGeLVZAaSyjkSNhNAjE
+2024-12-24T23:29:25.695Z info: POST /api/auth/reset-password
+2024-12-24T23:29:25.707Z info: Password reset attempt initiated
+2024-12-24T23:29:25.830Z info: Password reset successfully
+2024-12-24T23:29:51.193Z info: POST /api/auth/login
+2024-12-24T23:29:51.195Z info: Login attempt
+2024-12-24T23:29:51.291Z warn: Invalid password attempt
+2024-12-24T23:30:05.424Z info: POST /api/auth/login
+2024-12-24T23:30:05.426Z info: Login attempt
+2024-12-24T23:30:05.529Z info: User logged in successfully

@@ -8,8 +8,24 @@ import {
 import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
 
+
+/**
+ * Registers a new user.
+ * 
+ * @param {Object} userDetails - The user details.
+ * @param {string} userDetails.name - The name of the user.
+ * @param {string} userDetails.email - The email of the user.
+ * @param {string} userDetails.password - The password of the user.
+ * @returns {Promise<Object>} The registered user details.
+ * @throws {Error} If the email is already registered or if there is an error sending the verification email.
+ */
 export const registerUser = async ({ name, email, password }) => {
-    if (await User.exists({ email })) throw new Error('Email already registered');
+    logger.info('Registering a new user');
+
+    if (await User.exists({ email })) {
+        logger.warn(`Email already registered: ${email}`);
+        throw new Error('Email already registered');
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
@@ -19,145 +35,193 @@ export const registerUser = async ({ name, email, password }) => {
         isVerified: false,
     });
 
+    logger.info(`User created with ID: ${newUser._id}`);
+
     const verificationToken = generateToken({ userId: newUser._id }, TOKEN_TYPES.VERIFY);
-    console.log(verificationToken);
+    logger.debug(`Generated verification token: ${verificationToken}`);
+
     const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${verificationToken}`;
     const emailContent = createVerificationEmailTemplate(name, verificationLink);
-    console.log(emailContent);
+    logger.debug(`Created verification email content: ${emailContent}`);
 
     try {
         await sendEmail(email, 'Verify Your Email', emailContent);
+        logger.info(`Verification email sent to: ${email}`);
     } catch (error) {
         logger.error(`Error sending verification email: ${error.message}`);
+        throw new Error('Error sending verification email');
     }
 
     return { id: newUser._id, email: newUser.email };
 };
-export const loginUser = async ({ email, password }) => {
-    try {
-        console.log('Login attempt:', { email, password });
 
+/**
+ * Logs in a user.
+ * 
+ * @param {Object} loginDetails - The login details.
+ * @param {string} loginDetails.email - The email of the user.
+ * @param {string} loginDetails.password - The password of the user.
+ * @returns {Promise<Object>} The login result containing success status, token, and refresh token.
+ * @throws {Error} If there is an error during the login process.
+ */
+export const loginUser = async ({ email, password }) => {
+    logger.info('Login attempt', { email });
+
+    try {
         const user = await User.findOne({ email });
         if (!user) {
-            console.log('User not found');
+            logger.warn('User not found', { email });
             return { success: false, message: 'Email not found' };
         }
 
-        console.log('Stored hashed password:', user.password);
+        logger.debug('Stored hashed password', { userId: user._id });
 
         const isValidPassword = await bcrypt.compare(password.trim(), user.password);
-        console.log('Password valid:', isValidPassword);
+        logger.debug('Password valid', { isValidPassword });
 
         if (!isValidPassword) {
+            logger.warn('Invalid password attempt', { email });
             return { success: false, message: 'Invalid password' };
         }
 
         if (!user.isVerified) {
+            logger.warn('Unverified email attempt', { email });
             return { success: false, message: 'Please verify your email before logging in' };
         }
 
         const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
         const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
 
+        logger.info('User logged in successfully', { userId: user._id });
+
         return { success: true, token, refreshToken };
     } catch (error) {
-        console.error('Login error:', error.message);
+        logger.error('Login error', { message: error.message });
         return { success: false, message: error.message };
     }
 };
 
-// export const loginUser = async ({ email, password }) => {
-//     try {
-//         // Fetch the user from the database
-//         const user = await User.findOne({ email: 'motazbouchhiwa@gmail.com' });
-//         console.log('Stored Password (Hashed):', user.password);
-
-//         // Hash a sample password to compare
-//         const testPassword = 'Password123';
-//         const isMatch = await bcrypt.compare(testPassword, user.password);
-//         console.log('Password Match:', isMatch);
-
-//         if (!user) {
-//             return { success: false, message: 'Email not found' };
-//         }
-
-//         const isValidPassword = await bcrypt.compare(password, user.password);
-//         if (!isValidPassword) {
-//             return { success: false, message: 'Invalid password' };
-//         }
-
-//         if (!user.isVerified) {
-//             return { success: false, message: 'Please verify your email before logging in' };
-//         }
-
-//         const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
-//         const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
-//         return { success: true, token };
-//     } catch (error) {
-//         return { success: false, message: error.message };
-//     }
-// };
-
+/**
+ * Requests a password reset for a user.
+ * 
+ * @param {string} email - The email of the user requesting the password reset.
+ * @returns {Promise<void>} 
+ * @throws {Error} If there is an error sending the password reset email.
+ */
 export const requestPasswordReset = async (email) => {
+    logger.info('Password reset request initiated', { email });
+
     const user = await User.findOne({ email });
-    if (!user) return;
+    if (!user) {
+        logger.warn('User not found for password reset', { email });
+        return;
+    }
 
     const resetToken = generateToken({ userId: user._id }, TOKEN_TYPES.RESET);
     const resetLink = `${process.env.BASE_URL}/api/auth/reset-password?token=${resetToken}`;
     const emailContent = createPasswordResetTemplate(user.name, resetLink);
 
+    logger.debug('Password reset email content created', { resetLink });
+
     try {
         await sendEmail(email, 'Password Reset Request', emailContent);
+        logger.info('Password reset email sent', { email });
     } catch (error) {
-        logger.error(`Error sending password reset email: ${error.message}`);
+        logger.error('Error sending password reset email', { message: error.message });
+        throw new Error('Error sending password reset email');
     }
 };
 
+/**
+ * Resets the password for a user.
+ * 
+ * @param {string} token - The password reset token.
+ * @param {string} newPassword - The new password.
+ * @returns {Promise<void>}
+ * @throws {Error} If the token is missing, invalid, or if there is an error during the password reset process.
+ */
 export const resetPassword = async (token, newPassword) => {
+    logger.info('Password reset attempt initiated');
+
     try {
         if (!token) {
+            logger.error('Token is missing');
             throw new Error('Token is missing');
         }
 
         const decoded = verifyToken(token, TOKEN_TYPES.RESET);
+        logger.debug('Token verified', { userId: decoded.userId });
 
         const user = await User.findById(decoded.userId);
         if (!user) {
+            logger.warn('User not found for password reset', { userId: decoded.userId });
             throw new Error('User not found');
         }
 
         user.password = await bcrypt.hash(newPassword, 10); // Securely hash the new password
         await user.save();
+        logger.info('Password reset successfully', { userId: user._id });
     } catch (error) {
+        logger.error('Error during password reset', { message: error.message });
         throw error;
     }
 };
 
-
+/**
+ * Verifies a user's email.
+ * 
+ * @param {string} token - The email verification token.
+ * @returns {Promise<void>}
+ * @throws {Error} If the token is invalid, expired, or if there is an error during the email verification process.
+ */
 export const verifyEmail = async (token) => {
-    // Decode the token and verify its type
-    const decoded = verifyToken(token, TOKEN_TYPES.VERIFY);
-    console.log(decoded);
-    if (!decoded) throw new Error('Invalid or expired token');
+    logger.info('Email verification attempt initiated');
 
-    // Find the user by the ID embedded in the token
-    const user = await User.findById(decoded.userId);
-    if (!user) throw new Error('User not found');
+    try {
+        const decoded = verifyToken(token, TOKEN_TYPES.VERIFY);
+        logger.debug('Token verified', { userId: decoded.userId });
 
-    // Check if the user's email is already verified
-    if (user.isVerified) throw new Error('Email already verified');
+        if (!decoded) {
+            logger.error('Invalid or expired token');
+            throw new Error('Invalid or expired token');
+        }
 
-    // Mark the user's email as verified
-    user.isVerified = true;
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            logger.warn('User not found for email verification', { userId: decoded.userId });
+            throw new Error('User not found');
+        }
 
-    // Save the updated user object to the database
-    await user.save();
+        if (user.isVerified) {
+            logger.warn('Email already verified', { userId: user._id });
+            throw new Error('Email already verified');
+        }
+
+        user.isVerified = true;
+
+        await user.save();
+        logger.info('Email verified successfully', { userId: user._id });
+    } catch (error) {
+        logger.error('Error during email verification', { message: error.message });
+        throw error;
+    }
 };
 
+/**
+ * Validates a password reset token.
+ * 
+ * @param {string} token - The password reset token.
+ * @returns {Object} The decoded token if valid.
+ * @throws {Error} If the token is missing or invalid.
+ */
 export const validateResetToken = (token) => {
+    logger.info('Password reset token validation initiated');
+
     if (!token) {
+        logger.error('Token is missing');
         throw new Error('Token is missing');
     }
-    console.log('Validating reset token:', token);
+
+    logger.debug('Validating reset token', { token });
     return verifyToken(token, TOKEN_TYPES.RESET);
 };
