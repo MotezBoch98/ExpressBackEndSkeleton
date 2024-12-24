@@ -11,24 +11,43 @@ connectDB();
 
 const app = express();
 
+/**
+ * Middleware to enable CORS.
+ */
 app.use(cors({
     origin: 'http://localhost:5000',
     credentials: true
 }));
 
+/**
+ * Middleware to log incoming requests.
+ */
 app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`);
     next();
 });
 
+/**
+ * Route to serve Swagger JSON specification.
+ */
 app.get('/swagger.json', (req, res) => {
     res.json(swaggerSpec);
 });
 
+/**
+ * Middleware to parse JSON and URL-encoded data.
+ */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(errorHandler);
+
+/**
+ * Route to serve Swagger UI documentation.
+ */
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger setup
+
+/**
+ * Route to handle authentication-related requests.
+ */
 app.use('/api/auth', authRoutes);
 
 console.log('App initialized and routes set up');
