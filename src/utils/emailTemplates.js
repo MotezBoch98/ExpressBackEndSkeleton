@@ -1,3 +1,10 @@
+/**
+ * Creates an email template for email verification.
+ * 
+ * @param {string} userName - The name of the user.
+ * @param {string} verificationLink - The link to verify the user's email.
+ * @returns {string} The email template as an HTML string.
+ */
 export const createVerificationEmailTemplate = (userName, verificationLink) => {
     return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -21,6 +28,13 @@ export const createVerificationEmailTemplate = (userName, verificationLink) => {
     `;
 };
 
+/**
+ * Creates an email template for password reset.
+ * 
+ * @param {string} userName - The name of the user.
+ * @param {string} resetLink - The link to reset the user's password.
+ * @returns {string} The email template as an HTML string.
+ */
 export const createPasswordResetTemplate = (userName, resetLink) => {
     return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">

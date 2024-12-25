@@ -5,6 +5,15 @@ import logger from '../config/logger.js';
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+/**
+ * Sends an email using SendGrid.
+ * 
+ * @param {string} to - The recipient's email address.
+ * @param {string} subject - The subject of the email.
+ * @param {string} htmlContent - The HTML content of the email.
+ * @returns {Promise<void>}
+ * @throws {Error} If there is an error sending the email.
+ */
 export const sendEmail = async (to, subject, htmlContent) => {
     const msg = {
         to,
