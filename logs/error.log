@@ -12,3 +12,39 @@
 2024-12-03T14:37:21.655Z error: Password reset failed: Cannot read properties of undefined (reading 'method')
 2024-12-10T17:12:24.788Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
 2024-12-10T17:13:24.963Z error: Error sending email: getaddrinfo ENOTFOUND api.sendgrid.com
+2024-12-25T00:32:45.192Z error: Error sending email: Failed to send email
+2024-12-25T00:32:50.072Z error: Error during password reset Invalid token
+2024-12-25T00:32:50.087Z error: Error during email verification Invalid token
+2024-12-25T00:32:50.091Z error: Error during email verification Invalid token
+2024-12-25T00:39:26.645Z error: Error sending email: Failed to send email
+2024-12-25T00:39:28.699Z error: Database connection failed: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+2024-12-25T00:39:30.765Z error: Error during email verification Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:39:30.790Z error: Error during password reset Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:39:30.799Z error: Error during email verification Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:41:20.139Z error: Database connection failed: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+2024-12-25T00:41:20.702Z error: Error sending email: Failed to send email
+2024-12-25T00:41:26.394Z error: Error during email verification Email already verified
+2024-12-25T00:41:26.609Z error: Error during email verification Email already verified
+2024-12-25T00:42:34.615Z error: Database connection failed: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+2024-12-25T00:42:35.194Z error: Error sending email: Failed to send email
+2024-12-25T00:42:37.866Z error: Error during password reset Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:42:37.875Z error: Error during email verification Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:42:38.565Z error: Error during email verification Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:50:08.449Z error: Error sending email: Failed to send email
+2024-12-25T00:50:09.799Z error: Error during password reset Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:50:09.809Z error: Error during email verification Cast to ObjectId failed for value "some-valid-user-id" (type string) at path "_id" for model "User"
+2024-12-25T00:50:10.278Z error: Error during email verification User not found
+2024-12-25T00:55:08.850Z error: Error sending email: Failed to send email
+2024-12-25T00:55:11.244Z error: Error during email verification User not found
+2024-12-25T00:58:49.723Z error: Error sending email: Failed to send email
+2024-12-25T00:58:52.682Z error: Error during email verification Email already verified
+2024-12-25T00:58:52.936Z error: Error during email verification Email already verified
+2024-12-25T01:01:52.194Z error: Error sending email: Failed to send email
+2024-12-25T01:01:53.938Z error: Error during email verification Email already verified
+2024-12-25T01:01:53.968Z error: Error during email verification Email already verified
+2024-12-28T13:03:13.253Z error: Error during password reset Invalid token
+2024-12-28T13:05:33.547Z error: Error during password reset Invalid token
+2024-12-28T16:11:05.886Z error: Error during password reset Invalid token
+2024-12-28T16:16:21.565Z error: Error during password reset Invalid token
+2024-12-28T16:18:36.653Z error: Error during password reset Invalid token
+2024-12-29T18:46:29.241Z error: Error sending email: Failed to send email
