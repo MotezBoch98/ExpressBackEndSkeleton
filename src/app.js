@@ -1,5 +1,6 @@
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import { swaggerSpec, swaggerUi } from './config/swagger.js';
 import express from 'express';
 import dotenv from 'dotenv';
@@ -53,7 +54,7 @@ app.use('/api/auth', authRoutes);
 /**
  * Route to handle profile-related requests.
  */
-app.use('/api/profile', profileRoutes);
+app.use('/api/profile', userRoutes);
 
 console.log('App initialized and routes set up');
 

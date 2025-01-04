@@ -29,6 +29,7 @@ export const sendEmail = async (to, subject, htmlContent) => {
     try {
         logger.info(`Sending email to: ${to}, subject: ${subject}`);
         const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, msg);
+
         logger.info(`Email sent successfully: ${JSON.stringify(response)}`);
     } catch (error) {
         logger.error(`Error sending email: ${error.response?.message || error.message}`);

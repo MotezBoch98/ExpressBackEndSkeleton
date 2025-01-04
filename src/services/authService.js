@@ -48,6 +48,8 @@ export const registerUser = async ({ name, email, password }) => {
         logger.info(`Verification email sent to: ${email}`);
     } catch (error) {
         logger.error(`Error sending verification email: ${error.message}`);
+        await User.findByIdAndDelete(newUser._id); // Delete the user if email sending fails
+        logger.info(`User with ID: ${newUser._id} deleted due to email sending failure`);
         throw new Error('Error sending verification email');
     }
 
@@ -87,7 +89,7 @@ export const loginUser = async ({ email, password }) => {
             logger.warn('Unverified email attempt', { email });
             return { success: false, message: 'Please verify your email before logging in' };
         }
-
+            
         const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
         const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
 
