@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/JWT.js';
+import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { sendEmail } from '../utils/sendEmail.js';
 import {
     createVerificationEmailTemplate,
@@ -7,7 +7,6 @@ import {
 } from '../utils/emailTemplates.js';
 import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
-
 
 /**
  * Registers a new user.

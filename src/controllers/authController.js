@@ -1,6 +1,5 @@
 import * as authService from '../services/authService.js';
 
-
 /**
  * Registers a new user.
  * 
@@ -42,6 +41,24 @@ export const login = async (req, res) => {
         res.status(200).json({ success: true, token: result.token });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/**
+ * Verifies a user's email.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string} req.query.token - The email verification token.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>}
+ */
+export const verifyEmail = async (req, res) => {
+    try {
+        await authService.verifyEmail(req.query.token);
+        res.status(200).json({ success: true, message: 'Email verified successfully' });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
     }
 };
 
@@ -162,24 +179,6 @@ export const resetPassword = async (req, res) => {
 
         await authService.resetPassword(token, newPassword);
         res.status(200).json({ success: true, message: 'Password updated successfully' });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
-    }
-};
-
-/**
- * Verifies a user's email.
- * 
- * @param {Object} req - The request object.
- * @param {Object} req.query - The query parameters.
- * @param {string} req.query.token - The email verification token.
- * @param {Object} res - The response object.
- * @returns {Promise<void>}
- */
-export const verifyEmail = async (req, res) => {
-    try {
-        await authService.verifyEmail(req.query.token);
-        res.status(200).json({ success: true, message: 'Email verified successfully' });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
