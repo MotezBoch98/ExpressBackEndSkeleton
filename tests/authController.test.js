@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../src/models/User.js';
 import * as emailUtils from '../src/utils/sendEmail.js';
-import * as JWT from '../src/utils/JWT.js';
+import * as JWT from '../src/utilsjwtUtils.js';
 
 beforeAll(async () => {
     await mongoose.connect(process.env.DB_URI);

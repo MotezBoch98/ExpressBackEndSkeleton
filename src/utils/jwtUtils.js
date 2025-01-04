@@ -13,6 +13,19 @@ export const TOKEN_TYPES = {
     VERIFY: 'verify'
 };
 
+/**
+ * Configuration object for different types of JWT tokens.
+ * 
+ * @typedef {Object} TokenConfig
+ * @property {string} secret - The secret key used to sign the token.
+ * @property {string} expiresIn - The duration after which the token expires.
+ * 
+ * @type {Object.<string, TokenConfig>}
+ * @property {TokenConfig} ACCESS - Configuration for access tokens.
+ * @property {TokenConfig} REFRESH - Configuration for refresh tokens.
+ * @property {TokenConfig} RESET - Configuration for reset tokens.
+ * @property {TokenConfig} VERIFY - Configuration for verification tokens.
+ */
 const tokenConfigs = {
     [TOKEN_TYPES.ACCESS]: {
         secret: process.env.JWT_SECRET,

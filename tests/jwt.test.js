@@ -1,4 +1,4 @@
-import { generateToken, verifyToken, TOKEN_TYPES } from '../src/utils/JWT.js';
+import { generateToken, verifyToken, TOKEN_TYPES } from '../src/utils/jwtUtils.js';
 
 describe('JWT Utils', () => {
     it('should generate a token', () => {

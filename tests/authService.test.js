@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import * as JWT from '../src/utils/JWT.js';
+import * as JWT from '../src/utils/jwtUtils.js';
 import * as emailUtils from '../src/utils/sendEmail.js';
 import logger from '../src/config/logger.js';
 import User from '../src/models/User.js';

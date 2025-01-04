@@ -50,6 +50,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Swagger 
  */
 app.use('/api/auth', authRoutes);
 
+/**
+ * Route to handle profile-related requests.
+ */
+app.use('/api/profile', profileRoutes);
+
 console.log('App initialized and routes set up');
 
 export default app;
