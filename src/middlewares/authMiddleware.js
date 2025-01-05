@@ -20,7 +20,6 @@ const authMiddleware = async (req, res, next) => {
 
     try {
         const decoded = verifyToken(token, TOKEN_TYPES.ACCESS);
-        console.log('Decoded token:', decoded);
 
         const user = await User.findById(decoded.userId);
 
