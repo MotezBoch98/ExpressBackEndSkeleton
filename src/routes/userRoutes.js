@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, getProfile, getUserById, updateUser } from '../controllers/userController.js';
+import { getAllUsers, getProfile, getUserById, updateUser, deleteUser } from '../controllers/userController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -117,5 +117,28 @@ router.get('/user/:id',authMiddleware, getUserById);
  *         description: Unauthorized
  */
 router.put('/user/:id',authMiddleware, updateUser);
+
+/**
+ * @swagger
+ * /api/profile-management/user/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Profile Management]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: Successfully deleted user
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.delete('/user/:id', authMiddleware, deleteUser);
 
 export default router;
