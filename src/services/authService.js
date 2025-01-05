@@ -1,10 +1,8 @@
 import User from '../models/User.js';
-import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { sendEmail } from '../utils/sendEmail.js';
-import {
-    createVerificationEmailTemplate,
-    createPasswordResetTemplate,
-} from '../utils/emailTemplates.js';
+import { createVerificationEmailTemplate, createPasswordResetTemplate } from '../utils/emailTemplates.js';
+import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
+import { generateOtp, saveOtp, verifyOtp, cleanUpExpiredOtps } from '../utils/otpUtils.js';
 import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
 
@@ -89,11 +87,9 @@ export const loginUser = async ({ email, password }) => {
             logger.warn('Unverified email attempt', { email });
             return { success: false, message: 'Please verify your email before logging in' };
         }
-            
+
         const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
         const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
-
-        logger.info('User logged in successfully', { userId: user._id });
 
         return { success: true, token, refreshToken };
     } catch (error) {
@@ -225,4 +221,61 @@ export const validateResetToken = (token) => {
 
     logger.debug('Validating reset token', { token });
     return verifyToken(token, TOKEN_TYPES.RESET);
+};
+
+/**
+ * Sends an email verification OTP to the specified email address.
+ *
+ * @param {string} email - The email address to send the OTP to.
+ * @throws {Error} If the user is not found.
+ * @returns {Promise<void>} A promise that resolves when the OTP has been sent.
+ */
+export const requestEmailVerificationOtp = async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const otp = generateOtp();
+    await saveOtp(user._id, otp);
+
+    const subject = 'Your OTP Code';
+    const htmlContent = `<p>Your OTP code is ${otp}</p>`;
+    await sendEmail(email, subject, htmlContent);
+
+    logger.info(`OTP sent to ${email}`);
+};
+
+/**
+ * Verifies the OTP (One Time Password) for a given email.
+ *
+ * @param {string} email - The email address of the user to verify.
+ * @param {string} otp - The OTP to verify.
+ * @throws {Error} If the user is not found or OTP verification fails.
+ * @returns {Promise<void>} A promise that resolves when the email is successfully verified.
+ */
+export const verifyEmailOtp = async (email, otp) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    await verifyOtp(user._id, otp);
+    user.isVerified = true;
+    await user.save();
+
+    logger.info(`Email verified for ${email}`);
+};
+
+/**
+ * Cleans up expired OTPs by calling the cleanUpExpiredOtps function.
+ * Logs an informational message once the cleanup is complete.
+ * 
+ * @async
+ * @function cleanUpOtps
+ * @returns {Promise<void>} A promise that resolves when the cleanup is complete.
+ */
+export const cleanUpOtps = async () => {
+    await cleanUpExpiredOtps();
+    logger.info('Expired OTPs cleaned up');
 };

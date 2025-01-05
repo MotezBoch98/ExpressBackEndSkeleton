@@ -1,5 +1,5 @@
-import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm } from '../controllers/authController.js';
 import express from 'express';
+import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -59,40 +59,6 @@ router.post('/signup', register);
 
 /**
  * @swagger
- * /api/auth/verify-email:
- *   get:
- *     tags:
- *       - Authentication
- *     summary: Verify email address
- *     description: Verify a user's email using a token sent via email.
- *     parameters:
- *       - in: query
- *         name: token
- *         required: true
- *         description: Email verification token
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Email verified successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Email verified successfully
- *       400:
- *         description: Invalid or expired token
- */
-router.get('/verify-email', verifyEmail);
-
-/**
- * @swagger
  * /api/auth/login:
  *   post:
  *     tags:
@@ -134,6 +100,101 @@ router.get('/verify-email', verifyEmail);
  *         description: Invalid email or password
  */
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/auth/verify-email:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Verify email address
+ *     description: Verify a user's email using a token sent via email.
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         description: Email verification token
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Email verified successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.get('/verify-email', verifyEmail);
+
+/**
+ * @swagger
+ * /api/auth/request-otp:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Request OTP for email verification
+ *     description: Sends an OTP to the user's email for verification.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john.doe@example.com
+ *     responses:
+ *       200:
+ *         description: OTP sent to email
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/request-otp', requestEmailVerificationOtp);
+
+/**
+ * @swagger
+ * /api/auth/verify-otp:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Verify OTP for email verification
+ *     description: Verifies the OTP sent to the user's email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john.doe@example.com
+ *               otp:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Invalid or expired OTP
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/verify-otp', verifyEmailOtp);
 
 /**
  * @swagger

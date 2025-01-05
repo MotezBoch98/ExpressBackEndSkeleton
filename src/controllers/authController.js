@@ -1,4 +1,5 @@
 import * as authService from '../services/authService.js';
+import logger from '../config/logger.js';
 
 /**
  * Registers a new user.
@@ -12,10 +13,13 @@ import * as authService from '../services/authService.js';
  * @returns {Promise<void>}
  */
 export const register = async (req, res) => {
+    logger.info('Registering a new user');
     try {
         const user = await authService.registerUser(req.body);
+        logger.info('User registered successfully', { userId: user._id });
         res.status(201).json({ success: true, data: user });
     } catch (error) {
+        logger.error('Error registering user', { error: error.message });
         res.status(400).json({ success: false, message: error.message });
     }
 };
@@ -31,15 +35,19 @@ export const register = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const login = async (req, res) => {
+    logger.info('Logging in user', { email: req.body.email });
     try {
         const result = await authService.loginUser(req.body);
 
         if (!result.success) {
+            logger.warn('Login failed', { email: req.body.email });
             return res.status(400).json({ success: false, message: result.message });
         }
 
+        logger.info('User logged in successfully', { email: req.body.email });
         res.status(200).json({ success: true, token: result.token });
     } catch (error) {
+        logger.error('Error logging in user', { error: error.message });
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -54,10 +62,13 @@ export const login = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const verifyEmail = async (req, res) => {
+    logger.info('Verifying email', { token: req.query.token });
     try {
         await authService.verifyEmail(req.query.token);
+        logger.info('Email verified successfully');
         res.status(200).json({ success: true, message: 'Email verified successfully' });
     } catch (error) {
+        logger.error('Error verifying email', { error: error.message });
         res.status(400).json({ success: false, message: error.message });
     }
 };
@@ -72,10 +83,13 @@ export const verifyEmail = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const requestPasswordReset = async (req, res) => {
+    logger.info('Requesting password reset', { email: req.body.email });
     try {
         await authService.requestPasswordReset(req.body.email);
+        logger.info('Password reset email sent', { email: req.body.email });
         res.status(200).json({ success: true, message: 'Password reset email sent' });
     } catch (error) {
+        logger.error('Error requesting password reset', { error: error.message });
         res.status(400).json({ success: false, message: error.message });
     }
 };
@@ -90,6 +104,7 @@ export const requestPasswordReset = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const showResetPasswordForm = async (req, res) => {
+    logger.info('Displaying reset password form', { token: req.query.token });
     try {
         const token = req.query.token;
 
@@ -142,6 +157,7 @@ export const showResetPasswordForm = async (req, res) => {
             </html>
         `);
     } catch (error) {
+        logger.error('Error displaying reset password form', { error: error.message });
         res.status(400).send(`
             <html>
                 <body>
@@ -165,21 +181,68 @@ export const showResetPasswordForm = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const resetPassword = async (req, res) => {
+    logger.info('Resetting password', { token: req.body.token });
     try {
-        console.log('Incoming body:', req.body); // Debugging
         const { token, newPassword, confirmPassword } = req.body;
 
         if (!token) {
+            logger.warn('Token is missing');
             return res.status(400).json({ success: false, message: 'Token is missing' });
         }
 
         if (newPassword !== confirmPassword) {
+            logger.warn('Passwords do not match');
             return res.status(400).json({ success: false, message: 'Passwords do not match' });
         }
 
         await authService.resetPassword(token, newPassword);
+        logger.info('Password updated successfully');
         res.status(200).json({ success: true, message: 'Password updated successfully' });
     } catch (error) {
+        logger.error('Error resetting password', { error: error.message });
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+/**
+ * Handles the request to send an email verification OTP.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.email - The email address to send the OTP to.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the OTP has been sent.
+ */
+export const requestEmailVerificationOtp = async (req, res) => {
+    logger.info('Requesting email verification OTP', { email: req.body.email });
+    try {
+        await authService.requestEmailVerificationOtp(req.body.email);
+        logger.info('OTP sent to email', { email: req.body.email });
+        res.status(200).json({ success: true, message: 'OTP sent to email' });
+    } catch (error) {
+        logger.error(`Error requesting OTP for email verification: ${error.message}`);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/**
+ * Verifies the OTP for email verification.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.email - The email address to verify.
+ * @param {string} req.body.otp - The OTP to verify.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the OTP verification is complete.
+ */
+export const verifyEmailOtp = async (req, res) => {
+    logger.info('Verifying email OTP', { email: req.body.email });
+    try {
+        await authService.verifyEmailOtp(req.body.email, req.body.otp);
+        logger.info('Email verified successfully', { email: req.body.email });
+        res.status(200).json({ success: true, message: 'Email verified successfully' });
+    } catch (error) {
+        logger.error(`Error verifying OTP for email verification: ${error.message}`);
         res.status(400).json({ success: false, message: error.message });
     }
 };
