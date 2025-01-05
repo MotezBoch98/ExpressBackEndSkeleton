@@ -1,16 +1,22 @@
-import Mailgun from 'mailgun.js';
-import formData from 'form-data';
+import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import logger from '../config/logger.js';
 
 dotenv.config();
 
-// Mailgun configuration
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY });
+/**
+ * Creates the Nodemailer transporter with Gmail configuration.
+ */
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: process.env.GMAIL_USER, // Your Gmail address
+        pass: process.env.GMAIL_APP_PASSWORD, // App Password
+    },
+});
 
 /**
- * Sends an email using Mailgun.
+ * Sends an email using Nodemailer and Gmail.
  * 
  * @param {string} to - The recipient's email address.
  * @param {string} subject - The subject of the email.
@@ -20,19 +26,19 @@ const mg = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY })
  */
 export const sendEmail = async (to, subject, htmlContent) => {
     const msg = {
-        from: process.env.EMAIL_FROM, // Ensure this email is verified with Mailgun
-        to: [to], // Mailgun accepts arrays for multiple recipients
-        subject,
-        html: htmlContent,
+        from: `${process.env.GMAIL_USER}`, // Sender email
+        to, // Recipient email
+        subject, // Subject
+        html: htmlContent, // HTML content
     };
 
     try {
         logger.info(`Sending email to: ${to}, subject: ${subject}`);
-        const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, msg);
+        const response = await transporter.sendMail(msg);
 
-        logger.info(`Email sent successfully: ${JSON.stringify(response)}`);
+        logger.info(`Email sent successfully: ${response.messageId}`);
     } catch (error) {
-        logger.error(`Error sending email: ${error.response?.message || error.message}`);
+        logger.error(`Error sending email: ${error.message}`);
         throw new Error('Failed to send email');
     }
 };
