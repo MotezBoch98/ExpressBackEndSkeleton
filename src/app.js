@@ -54,7 +54,7 @@ app.use('/api/auth', authRoutes);
 /**
  * Route to handle profile-related requests.
  */
-app.use('/api/profile', userRoutes);
+app.use('/api/profile-management', userRoutes);
 
 console.log('App initialized and routes set up');
 

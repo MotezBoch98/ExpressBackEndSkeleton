@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
+import logger from '../config/logger.js';
 
 /**
  * Creates a new user. This method is meant to be used by admins.
