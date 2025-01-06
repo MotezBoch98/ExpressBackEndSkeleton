@@ -1,0 +1,27 @@
+# This Docker Compose file defines two services: app and mongo.
+# 
+# Services:
+# 
+# 1. app:
+#    - This service builds the application from the current directory.
+#    - It maps port 5000 on the host to port 5000 in the container.
+#    - It sets an environment variable DB_URI to connect to the mongo service.
+#    - It depends on the mongo service to be up and running before starting.
+# 
+# 2. mongo:
+#    - This service uses the latest MongoDB image from Docker Hub.
+#    - It maps port 27017 on the host to port 27017 in the container.
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_URI=mongodb://mongo:27017/auth_db
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
