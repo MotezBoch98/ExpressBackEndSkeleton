@@ -1,6 +1,6 @@
 import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
 import { swaggerSpec, swaggerUi } from './config/swagger.js';
 import express from 'express';
 import dotenv from 'dotenv';

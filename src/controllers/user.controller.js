@@ -1,4 +1,4 @@
-import * as userService from '../services/userService.js';
+import * as userService from '../services/user.service.js';
 
 /**
  * Creates a new user in the database.

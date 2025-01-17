@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import { sendEmail } from '../utils/sendEmail.js';
+import { sendSms } from '../utils/sendSms.js';
 import { createVerificationEmailTemplate, createPasswordResetTemplate } from '../utils/emailTemplates.js';
 import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { generateOtp, saveOtp, verifyOtp, cleanUpExpiredOtps } from '../utils/otpUtils.js';
@@ -9,14 +10,15 @@ import bcrypt from 'bcrypt';
 /**
  * Registers a new user.
  * 
- * @param {Object} userDetails - The user details.
+ * @param {Object} userData - The user details.
  * @param {string} userDetails.name - The name of the user.
  * @param {string} userDetails.email - The email of the user.
  * @param {string} userDetails.password - The password of the user.
+ * @param {string} userDetails.phoneNumber - The phone number of the user.
  * @returns {Promise<Object>} The registered user details.
  * @throws {Error} If the email is already registered or if there is an error sending the verification email.
  */
-export const registerUser = async ({ name, email, password }) => {
+export const registerUser = async ({ name, email, password, phoneNumber }) => {
     logger.info('Registering a new user');
 
     if (await User.exists({ email })) {
@@ -25,12 +27,18 @@ export const registerUser = async ({ name, email, password }) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
+    const userData = {
         name,
         email,
         password: hashedPassword,
         isVerified: false,
-    });
+    };
+
+    if (phoneNumber) {
+        userData.phoneNumber = phoneNumber;
+    }
+
+    const newUser = await User.create(userData);
 
     logger.info(`User created with ID: ${newUser._id}`);
 
@@ -247,6 +255,27 @@ export const requestEmailVerificationOtp = async (email) => {
 };
 
 /**
+ * Requests a phone verification OTP for the given phone number.
+ *
+ * @param {string} phone - The phone number to request the OTP for.
+ * @throws {Error} If the user with the given phone number is not found.
+ * @returns {Promise<void>} A promise that resolves when the OTP has been sent.
+ */
+export const requestPhoneVerificationOtp = async (phoneNumber) => {
+    const user = await User.findOne({ phoneNumber });
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const otp = generateOtp();
+    await saveOtp(user._id, otp);
+
+    const message = `Your OTP code is ${otp}`;
+    await sendSms(user.phoneNumber, message);
+    logger.info(`OTP sent to ${phoneNumber}`);
+}
+
+/**
  * Verifies the OTP (One Time Password) for a given email.
  *
  * @param {string} email - The email address of the user to verify.
@@ -265,6 +294,27 @@ export const verifyEmailOtp = async (email, otp) => {
     await user.save();
 
     logger.info(`Email verified for ${email}`);
+};
+
+/**
+ * Verifies the OTP for a given phone number.
+ *
+ * @param {string} phone - The phone number to verify.
+ * @param {string} otp - The OTP to verify.
+ * @throws {Error} If the user is not found or OTP verification fails.
+ * @returns {Promise<void>} A promise that resolves when the phone number is successfully verified.
+ */
+export const verifyPhoneOtp = async (phone, otp) => {
+    const user = await User.findOne({ phone });
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    await verifyOtp(user._id, otp);
+    user.isVerified = true;
+    await user.save();
+
+    logger.info(`Phone number verified for ${phone}`);
 };
 
 /**

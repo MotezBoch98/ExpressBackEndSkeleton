@@ -1,4 +1,4 @@
-import * as authService from '../services/authService.js';
+import * as authService from '../services/auth.service.js';
 import logger from '../config/logger.js';
 
 /**
@@ -9,6 +9,7 @@ import logger from '../config/logger.js';
  * @param {string} req.body.name - The name of the user.
  * @param {string} req.body.email - The email of the user.
  * @param {string} req.body.password - The password of the user.
+ * @param {string} req.body.phoneNumber - The phone number of the user.
  * @param {Object} res - The response object.
  * @returns {Promise<void>}
  */
@@ -243,6 +244,49 @@ export const verifyEmailOtp = async (req, res) => {
         res.status(200).json({ success: true, message: 'Email verified successfully' });
     } catch (error) {
         logger.error(`Error verifying OTP for email verification: ${error.message}`);
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+/**
+ * Handles the request to send an OTP to a phone number for verification.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.phoneNumber - The phone number to send the OTP to.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the OTP has been sent.
+ */
+export const requestPhoneVerificationOtp = async (req, res) => {
+    logger.info('Requesting phone verification OTP', { phoneNumber: req.body.phoneNumber });
+    try {
+        await authService.requestPhoneVerificationOtp(req.body.phoneNumber);
+        logger.info('OTP sent to phone', { phoneNumber: req.body.phoneNumber });
+        res.status(200).json({ success: true, message: 'OTP sent to phone' });
+    } catch (error) {
+        logger.error(`Error requesting OTP for phone verification: ${error.message}`);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/**
+ * Verifies the OTP for phone number verification.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request.
+ * @param {string} req.body.phoneNumber - The phone number to verify.
+ * @param {string} req.body.otp - The OTP to verify.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the OTP verification is complete.
+ */
+export const verifyPhoneOtp = async (req, res) => {
+    logger.info('Verifying phone OTP', { phoneNumber: req.body.phoneNumber });
+    try {
+        await authService.verifyPhoneOtp(req.body.phoneNumber, req.body.otp);
+        logger.info('Phone number verified successfully', { phoneNumber: req.body.phoneNumber });
+        res.status(200).json({ success: true, message: 'Phone number verified successfully' });
+    } catch (error) {
+        logger.error(`Error verifying OTP for phone verification: ${error.message}`);
         res.status(400).json({ success: false, message: error.message });
     }
 };

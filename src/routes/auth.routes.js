@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp } from '../controllers/authController.js';
+import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp } from '../controllers/auth.controller.js';
 
 const router = express.Router();
 
@@ -34,6 +34,9 @@ const router = express.Router();
  *               password:
  *                 type: string
  *                 example: Password123
+ *               phoneNumber:
+ *                 type: String
+ *                 example: "+21634567890"
  *     responses:
  *       201:
  *         description: User successfully registered
@@ -307,5 +310,66 @@ router.post('/request-password-reset', requestPasswordReset);
 router.route('/reset-password')
     .get(showResetPasswordForm)
     .post(resetPassword);
+
+/**
+ * @swagger
+ * /api/auth/request-phone-otp:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Request OTP for phone verification
+ *     description: Sends an OTP to the user's phone number for verification.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 example: +1234567890
+ *     responses:
+ *       200:
+ *         description: OTP sent to phone
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/request-phone-otp', requestPhoneVerificationOtp);
+
+/**
+ * @swagger
+ * /api/auth/verify-phone-otp:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Verify OTP for phone verification
+ *     description: Verifies the OTP sent to the user's phone number.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 example: +1234567890
+ *               otp:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       200:
+ *         description: Phone number verified successfully
+ *       400:
+ *         description: Invalid or expired OTP
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/verify-phone-otp', verifyPhoneOtp);
 
 export default router;
