@@ -1,5 +1,7 @@
 import express from 'express';
 import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp } from '../controllers/auth.controller.js';
+import validate from '../middlewares/validate.js';
+import { registerUserSchema, loginUserSchema } from '../validations/user.validation.js';
 
 const router = express.Router();
 
@@ -58,7 +60,7 @@ const router = express.Router();
  *       400:
  *         description: Invalid input
  */
-router.post('/signup', register);
+router.post('/signup', validate(registerUserSchema), register);
 
 /**
  * @swagger
@@ -102,7 +104,7 @@ router.post('/signup', register);
  *       400:
  *         description: Invalid email or password
  */
-router.post('/login', login);
+router.post('/login', validate(loginUserSchema), login);
 
 /**
  * @swagger

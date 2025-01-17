@@ -1,6 +1,8 @@
 import express from 'express';
 import { getAllUsers, getProfile, getUserById, updateUser, deleteUser } from '../controllers/user.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
+import validate from '../middlewares/validate.js';
+import { updateUserSchema } from '../validations/user.validation.js';
 
 const router = express.Router();
 
@@ -116,7 +118,7 @@ router.get('/user/:id',authMiddleware, getUserById);
  *       401:
  *         description: Unauthorized
  */
-router.put('/user/:id',authMiddleware, updateUser);
+router.put('/user/:id', authMiddleware, validate(updateUserSchema), updateUser);
 
 /**
  * @swagger
