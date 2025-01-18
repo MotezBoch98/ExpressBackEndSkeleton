@@ -17,11 +17,6 @@ jobs:
         image: mongo:6.0 # Use a stable version of MongoDB
         ports:
           - 27017:27017
-        options: >
-          --health-cmd="mongo --eval \"db.adminCommand('ping')\""
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
 
     steps:
       - name: Checkout code
