@@ -1,7 +1,8 @@
 import express from 'express';
 import { getAllUsers, getProfile, getUserById, updateUser, deleteUser } from '../controllers/user.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
-import validate from '../middlewares/validate.js';
+import validate from '../middlewares/validate.middleware.js';
+import checkRole from '../middlewares/role.middleware.js';
 import { updateUserSchema } from '../validations/user.validation.js';
 
 const router = express.Router();
@@ -45,7 +46,7 @@ const router = express.Router();
  *       404:
  *         description: Profile not found
  */
-router.get('/profile',authMiddleware, getProfile);
+router.get('/profile', authMiddleware, getProfile);
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.get('/profile',authMiddleware, getProfile);
  *       401:
  *         description: Unauthorized
  */
-router.get('/allUsers',authMiddleware, getAllUsers);
+router.get('/allUsers', authMiddleware, checkRole(['admin']), getAllUsers);
 
 /**
  * @swagger
@@ -82,7 +83,7 @@ router.get('/allUsers',authMiddleware, getAllUsers);
  *       401:
  *         description: Unauthorized
  */
-router.get('/user/:id',authMiddleware, getUserById);
+router.get('/user/:id', authMiddleware, checkRole(['admin', 'client']), getUserById);
 
 /**
  * @swagger
@@ -118,7 +119,7 @@ router.get('/user/:id',authMiddleware, getUserById);
  *       401:
  *         description: Unauthorized
  */
-router.put('/user/:id', authMiddleware, validate(updateUserSchema), updateUser);
+router.put('/user/:id', authMiddleware, checkRole(['admin']), validate(updateUserSchema), updateUser);
 
 /**
  * @swagger

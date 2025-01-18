@@ -1,6 +1,6 @@
 import express from 'express';
 import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp } from '../controllers/auth.controller.js';
-import validate from '../middlewares/validate.js';
+import validate from '../middlewares/validate.middleware.js';
 import { registerUserSchema, loginUserSchema } from '../validations/user.validation.js';
 
 const router = express.Router();

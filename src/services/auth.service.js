@@ -18,7 +18,7 @@ import bcrypt from 'bcrypt';
  * @returns {Promise<Object>} The registered user details.
  * @throws {Error} If the email is already registered or if there is an error sending the verification email.
  */
-export const registerUser = async ({ name, email, password, phoneNumber }) => {
+export const registerUser = async ({ name, email, password, phoneNumber, role }) => {
     logger.info('Registering a new user');
 
     if (await User.exists({ email })) {
@@ -32,6 +32,7 @@ export const registerUser = async ({ name, email, password, phoneNumber }) => {
         email,
         password: hashedPassword,
         isVerified: false,
+        role: role || 'client', // Assign role or default to 'client'
     };
 
     if (phoneNumber) {
