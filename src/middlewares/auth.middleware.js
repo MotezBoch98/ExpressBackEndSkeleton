@@ -11,7 +11,7 @@ import User from '../models/User.js'; // Adjust the path to your User model
  * @returns {Object} - Returns a 401 status with an error message if authentication fails.
  * @throws {Error} - Throws an error if token verification fails.
  */
-const authMiddleware = async (req, res, next) => {
+export const authenticated = async (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
@@ -36,5 +36,16 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-export default authMiddleware;
+/**
+ * Middleware to check if the user's role is authorized.
+ * 
+ * @param {string[]} roles - Array of roles that are allowed access.
+ * @returns {Function} Middleware function to check the user's role.
+ */
+export const authorized = (roles) => (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+        return res.status(403).json({ success: false, message: 'Access denied' });
+    }
+    next();
+};
 
