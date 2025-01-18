@@ -1,26 +1,34 @@
 import mongoose from 'mongoose';
-import connectDB from '../src/config/db.js';
+import connectDB from '../src/config/db';
+import logger from '../src/config/logger';
+
+jest.mock('mongoose');
+jest.mock('../src/config/logger');
 
 describe('Database Connection', () => {
-    let originalExit;
-
-    beforeAll(() => {
-        originalExit = process.exit;
-        process.exit = jest.fn();
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    afterAll(async () => {
-        await mongoose.connection.close();
-        process.exit = originalExit;
+    it('should connect to the database successfully', async () => {
+        mongoose.connect.mockResolvedValueOnce({});
+        await connectDB();
+        expect(logger.info).toHaveBeenCalledWith('Connecting to database...');
+        expect(logger.info).toHaveBeenCalledWith('Database connected');
+        expect(mongoose.connect).toHaveBeenCalledWith(process.env.DB_URI);
     });
 
-    it('should connect to the database', async () => {
-        try {
-            await connectDB();
-            expect(mongoose.connection.readyState).toBe(1); // 1 means connected
-        } catch (error) {
-            console.error('Database connection failed:', error.message);
-            expect(error).toBeNull(); // Fail the test if there is an error
-        }
+    it('should log an error and exit process if connection fails', async () => {
+        const errorMessage = 'Connection failed';
+        mongoose.connect.mockRejectedValueOnce(new Error(errorMessage));
+        const exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {});
+
+        await connectDB();
+
+        expect(logger.info).toHaveBeenCalledWith('Connecting to database...');
+        expect(logger.error).toHaveBeenCalledWith('Database connection failed:', { message: errorMessage });
+        expect(exitSpy).toHaveBeenCalledWith(1);
+
+        exitSpy.mockRestore();
     });
 });

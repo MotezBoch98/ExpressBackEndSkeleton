@@ -1,5 +1,5 @@
 {
-  "name": "project",
+  "name": "backend-express",
   "version": "1.0.0",
   "description": "a pretty basic example for a web-app back-end skeleton using MVC",
   "main": "server.js",
