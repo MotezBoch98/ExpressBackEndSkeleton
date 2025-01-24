@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, getProfile, getUserById, updateUser, deleteUser } from '../controllers/user.controller.js';
+import { fetchAllUsers, createUser, getUserById, updateUser, deleteUser } from '../controllers/user.controller.js';
 import validate from '../middlewares/validate.middleware.js';
 import { authorized, authenticated } from '../middlewares/auth.middleware.js';
 import { updateUserSchema } from '../validations/user.validation.js';
@@ -9,64 +9,30 @@ const router = express.Router();
 /**
  *  @swagger 
  * tags:
- *   name: Profile Management
- *   description: Endpoints for user profile management
+ *   name: User Management
+ *   description: Endpoints for user management
  */
 
 /**
  * @swagger
- * /api/profile-management/profile:
- *   get:
- *     summary: Get the profile of the logged-in user
- *     tags: [Profile Management]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Successfully retrieved profile
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: Profile not found
- */
-router.get('/profile', authenticated, getProfile);
-
-/**
- * @swagger
- * /api/profile-management/allUsers:
+ * /api/user-management/allUsers:
  *   get:
  *     summary: Get a list of all users
- *     tags: [Profile Management]
+ *     tags: [User Management]
  *     responses:
  *       200:
  *         description: Successfully retrieved list of users
  *       401:
  *         description: Unauthorized
  */
-router.get('/allUsers', authenticated, authorized(['admin']), getAllUsers);
+router.get('/allUsers', authenticated, authorized(['admin']), fetchAllUsers);
 
 /**
  * @swagger
- * /api/profile-management/user/{id}:
+ * /api/user-management/user/{id}:
  *   get:
  *     summary: Get a user by ID
- *     tags: [Profile Management]
+ *     tags: [User Management]
  *     parameters:
  *       - in: path
  *         name: id
@@ -82,14 +48,76 @@ router.get('/allUsers', authenticated, authorized(['admin']), getAllUsers);
  *       401:
  *         description: Unauthorized
  */
-router.get('/user/:id', authenticated, authorized(['admin', 'client']), getUserById);
+router.get('/user/:id', authenticated, getUserById);
 
 /**
  * @swagger
- * /api/profile-management/user/{id}:
+ * /api/user-management/create-user:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [User Management]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the user
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: The email of the user
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 description: The password for the user
+ *                 example: password123
+ *               role:
+ *                 type: string
+ *                 description: The role of the user
+ *                 example: client
+ *     responses:
+ *       201:
+ *         description: User successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: The ID of the newly created user
+ *                   example: 63f16a2c8a6e8a35b6d9f1e5
+ *                 name:
+ *                   type: string
+ *                   description: The name of the user
+ *                   example: John Doe
+ *                 email:
+ *                   type: string
+ *                   description: The email of the user
+ *                   example: johndoe@example.com
+ *                 role:
+ *                   type: string
+ *                   description: The role of the user
+ *                   example: client
+ *       400:
+ *         description: Invalid input data
+ *       401:
+ *         description: Unauthorized
+ */
+router.post('/create-user', authenticated, authorized(['admin']), createUser);
+
+/**
+ * @swagger
+ * /api/user-management/user/{id}:
  *   put:
  *     summary: Update a user by ID
- *     tags: [Profile Management]
+ *     tags: [User Management]
  *     parameters:
  *       - in: path
  *         name: id
@@ -122,10 +150,10 @@ router.put('/user/:id', authenticated, authorized(['admin']), validate(updateUse
 
 /**
  * @swagger
- * /api/profile-management/user/{id}:
+ * /api/user-management/user/{id}:
  *   delete:
  *     summary: Delete a user by ID
- *     tags: [Profile Management]
+ *     tags: [User Management]
  *     parameters:
  *       - in: path
  *         name: id
@@ -141,6 +169,6 @@ router.put('/user/:id', authenticated, authorized(['admin']), validate(updateUse
  *       401:
  *         description: Unauthorized
  */
-router.delete('/user/:id', authenticated, deleteUser);
+router.delete('/user/:id', authenticated, authorized(['admin']), deleteUser);
 
 export default router;

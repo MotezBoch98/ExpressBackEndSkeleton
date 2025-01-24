@@ -1,6 +1,24 @@
 import * as userService from '../services/user.service.js';
 
 /**
+ * Retrieves all users from the database and sends them in the response.
+ * 
+ * @async
+ * @function fetchAllUsers
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} Sends a JSON response with the list of users or an error message.
+*/
+export const fetchAllUsers = async (req, res) => {
+    try {
+        const users = await userService.fetchAllUsers();
+        res.status(200).json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+/**
  * Creates a new user in the database.
  *
  * @param {Object} req - Express request object.
@@ -18,27 +36,9 @@ export const createUser = async (req, res) => {
 };
 
 /**
- * Retrieves all users from the database and sends them in the response.
- * 
- * @async
- * @function getAllUsers
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @returns {Promise<void>} Sends a JSON response with the list of users or an error message.
- */
-export const getAllUsers = async (req, res) => {
-    try {
-        const users = await userService.getAllUsers();
-        res.status(200).json({ success: true, data: users });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
-
-/**
  * Get user by ID.
- *
- * @param {Object} req - Express request object.
+*
+* @param {Object} req - Express request object.
  * @param {Object} req.params - Request parameters.
  * @param {string} req.params.id - User ID.
  * @param {Object} res - Express response object.
@@ -48,25 +48,6 @@ export const getUserById = async (req, res) => {
     try {
         const user = await userService.getUserById(req.params.id);
         res.status(200).json({ success: true, data: user });
-    } catch (error) {
-        res.status(404).json({ success: false, message: error.message });
-    }
-};
-
-/**
- * Retrieves the profile of the currently authenticated user.
- *
- * @async
- * @function getProfile
- * @param {Object} req - Express request object.
- * @param {Object} req.user - The authenticated user's details (from middleware).
- * @param {Object} res - Express response object.
- * @returns {Promise<void>} Sends a JSON response with the user's profile or an error message.
- */
-export const getProfile = async (req, res) => {
-    try {
-        const profile = await userService.getProfile(req.user.id); // Assuming `req.user.id` contains the logged-in user's ID
-        res.status(200).json({ success: true, data: profile });
     } catch (error) {
         res.status(404).json({ success: false, message: error.message });
     }

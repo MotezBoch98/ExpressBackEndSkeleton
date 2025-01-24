@@ -38,11 +38,11 @@ export const createUser = async (data) => {
  * Fetches all users from the database.
  * 
  * @async
- * @function getAllUsers
+ * @function fetchAllUsers
  * @returns {Promise<Array>} A promise that resolves to an array of user objects.
  * @throws Will throw an error if there is an issue fetching the users.
  */
-export const getAllUsers = async () => {
+export const fetchAllUsers = async () => {
     logger.info('Fetching all users');
     try {
         const users = await User.find();
@@ -64,36 +64,13 @@ export const getAllUsers = async () => {
 export const getUserById = async (id) => {
     logger.info('Fetching user');
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id, { password: 0 });
         if (!user) {
             throw new Error('User not found');
         }
         return user;
     } catch (error) {
         logger.error('Fetching user failed', { message: error.message });
-        throw error;
-    }
-}
-
-/**
- * Fetches the profile of the logged-in user.
- *
- * @param {string} id - The ID of the logged-in user.
- * @returns {Promise<Object>} The profile object containing safe, public fields.
- * @throws {Error} If the user is not found or if there is an error during fetching.
- */
-export const getProfile = async (id) => {
-    logger.info('Fetching user profile');
-    try {
-        // Fetch user and exclude sensitive fields like password
-        const profile = await User.findById(id, { password: 0, roles: 0 });
-        if (!profile) {
-            throw new Error('Profile not found');
-        }
-        logger.info('Profile fetched successfully');
-        return profile;
-    } catch (error) {
-        logger.error('Fetching profile failed', { message: error.message });
         throw error;
     }
 }
