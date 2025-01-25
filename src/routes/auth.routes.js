@@ -309,9 +309,7 @@ router.post('/request-password-reset', requestPasswordReset);
  *       400:
  *         description: Invalid or expired token
  */
-router.route('/reset-password')
-    .get(showResetPasswordForm)
-    .post(resetPassword);
+router.route('/reset-password').get(showResetPasswordForm).post(resetPassword);
 
 /**
  * @swagger

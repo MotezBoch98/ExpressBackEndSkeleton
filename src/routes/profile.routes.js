@@ -1,5 +1,6 @@
 import express from 'express';
 import { fetchProfile, modifyProfile } from "../controllers/profile.controller.js";
+import validate from '../middlewares/validate.middleware.js';
 import { authenticated } from "../middlewares/auth.middleware.js";
 import { updateUserSchema } from '../validations/user.validation.js';
 
@@ -87,6 +88,6 @@ router.get('/profile', authenticated, fetchProfile);
  *       500:
  *         description: Internal server error
  */
-router.put('/profile', authenticated, updateUserSchema, modifyProfile);
+router.put('/profile', authenticated, validate(updateUserSchema), modifyProfile);
 
 export default router;
