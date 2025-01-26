@@ -5,7 +5,6 @@ import { createVerificationEmailTemplate, createPasswordResetTemplate } from '..
 import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { generateOtp, saveOtp, verifyOtp, cleanUpExpiredOtps } from '../utils/otpUtils.js';
 import logger from '../config/logger.js';
-import bcrypt from 'bcrypt';
 import AppError from '../utils/AppError.js';
 
 /**

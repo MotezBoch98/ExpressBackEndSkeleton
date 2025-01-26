@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import AppError from '../utils/AppError.js'; // Assume a centralized error class exists
+import AppError from '../utils/AppError.js';
 import logger from '../config/logger.js';
 
 /**
