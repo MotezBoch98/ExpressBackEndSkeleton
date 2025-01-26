@@ -16,65 +16,6 @@ import mongoose from 'mongoose';
  * @property {Date} createdAt - The date when the product was created. Automatically generated.
  * @property {Date} updatedAt - The date when the product was last updated. Automatically generated.
  */
-
-
-/**
- * Checks if the product is in stock.
- * 
- * @function isInStock
- * @memberof Product
- * @instance
- * @returns {boolean} True if the product is in stock, false otherwise.
- */
-
-/**
- * Applies a discount to the product price.
- * 
- * @function applyDiscount
- * @memberof Product
- * @instance
- * @param {number} percentageOff - The percentage of the discount to be applied.
- * @throws {Error} If the discount percentage is invalid.
- * @returns {number} The discounted price.
- */
-
-/**
- * Formats the product price.
- * 
- * @function formatPrice
- * @memberof Product
- * @instance
- * @param {string} [currency='USD'] - The currency in which to format the price.
- * @returns {string} The formatted price.
- */
-
-/**
- * Gets the stock status of the product.
- * 
- * @function getStockStatus
- * @memberof Product
- * @instance
- * @returns {string} The stock status ('Out of Stock', 'Low Stock', 'In Stock').
- */
-
-/**
- * Finds all featured products.
- * 
- * @function findFeatured
- * @memberof Product
- * @static
- * @returns {Promise<Array<Product>>} An array of featured products.
- */
-
-/**
- * Finds products by category.
- * 
- * @function findByCategory
- * @memberof Product
- * @static
- * @param {string} category - The category to search for.
- * @returns {Promise<Array<Product>>} An array of products in the specified category.
- */
 const productSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -129,26 +70,44 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-/**
- * Updates the average rating of the product.
- * 
- * @function updateAverageRating
- * @memberof Product
- * @instance
- * @param {number} newRating - The new rating to be added.
- * @returns {Promise<Product>} The updated product document.
- */
 productSchema.methods = {
+    /**
+     * Updates the average rating of the product.
+     * 
+     * @function updateAverageRating
+     * @memberof Product
+     * @instance
+     * @param {number} newRating - The new rating to be added.
+     * @returns {Promise<Product>} The updated product document.
+     */
     updateAverageRating: function (newRating) {
         this.ratings = ((this.ratings * this.numReviews) + newRating) / (this.numReviews + 1);
         this.numReviews += 1;
         return this.save();
     },
 
+    /**
+     * Checks if the product is in stock.
+     * 
+     * @function isInStock
+     * @memberof Product
+     * @instance
+     * @returns {boolean} True if the product is in stock, false otherwise.
+     */
     isInStock: function () {
         return this.stock > 0;
     },
 
+    /**
+     * Applies a discount to the product price.
+     * 
+     * @function applyDiscount
+     * @memberof Product
+     * @instance
+     * @param {number} percentageOff - The percentage of the discount to be applied.
+     * @throws {Error} If the discount percentage is invalid.
+     * @returns {number} The discounted price.
+    */
     applyDiscount: function (percentageOff) {
         if (percentageOff < 0 || percentageOff > 100) {
             throw new Error('Invalid discount percentage');
@@ -157,6 +116,15 @@ productSchema.methods = {
         return Number(discountedPrice.toFixed(2));
     },
 
+    /**
+     * Formats the product price.
+     * 
+     * @function formatPrice
+     * @memberof Product
+     * @instance
+     * @param {string} [currency='USD'] - The currency in which to format the price.
+     * @returns {string} The formatted price.
+    */
     formatPrice: function (currency = 'USD') {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -164,6 +132,14 @@ productSchema.methods = {
         }).format(this.price);
     },
 
+    /**
+     * Gets the stock status of the product.
+     * 
+     * @function getStockStatus
+     * @memberof Product
+     * @instance
+     * @returns {string} The stock status ('Out of Stock', 'Low Stock', 'In Stock').
+    */
     getStockStatus: function () {
         if (this.stock === 0) return 'Out of Stock';
         if (this.stock < 5) return 'Low Stock';
@@ -172,10 +148,27 @@ productSchema.methods = {
 };
 
 productSchema.statics = {
+    /**
+     * Finds all featured products.
+     * 
+     * @function findFeatured
+     * @memberof Product
+     * @static
+     * @returns {Promise<Array<Product>>} An array of featured products.
+    */
     findFeatured: function () {
         return this.find({ featured: true });
     },
 
+    /**
+     * Finds products by category.
+     * 
+     * @function findByCategory
+     * @memberof Product
+     * @static
+     * @param {string} category - The category to search for.
+     * @returns {Promise<Array<Product>>} An array of products in the specified category.
+     */
     findByCategory: function (category) {
         return this.find({ category });
     }

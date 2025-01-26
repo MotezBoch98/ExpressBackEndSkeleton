@@ -6,6 +6,7 @@ import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { generateOtp, saveOtp, verifyOtp, cleanUpExpiredOtps } from '../utils/otpUtils.js';
 import logger from '../config/logger.js';
 import bcrypt from 'bcrypt';
+import AppError from '../utils/AppError.js';
 
 /**
  * Registers a new user.
@@ -16,30 +17,23 @@ import bcrypt from 'bcrypt';
  * @param {string} userDetails.password - The password of the user.
  * @param {string} userDetails.phoneNumber - The phone number of the user.
  * @returns {Promise<Object>} The registered user details.
- * @throws {Error} If the email is already registered or if there is an error sending the verification email.
+ * @throws {AppError} If the email is already registered or there is an error during registration.
  */
 export const registerUser = async ({ name, email, password, phoneNumber, role }) => {
     logger.info('Registering a new user');
 
     if (await User.exists({ email })) {
         logger.warn(`Email already registered: ${email}`);
-        throw new Error('Email already registered');
+        throw new AppError('Email already registered', 400);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const userData = {
+    const newUser = await User.create({
         name,
         email,
-        password: hashedPassword,
-        isVerified: false,
-        role: role || 'client', // Assign role or default to 'client'
-    };
-
-    if (phoneNumber) {
-        userData.phoneNumber = phoneNumber;
-    }
-
-    const newUser = await User.create(userData);
+        password,
+        phoneNumber,
+        role: role || 'client'
+    });
 
     logger.info(`User created with ID: ${newUser._id}`);
 
@@ -48,16 +42,14 @@ export const registerUser = async ({ name, email, password, phoneNumber, role })
 
     const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${verificationToken}`;
     const emailContent = createVerificationEmailTemplate(name, verificationLink);
-    logger.debug(`Created verification email content: ${emailContent}`);
 
     try {
         await sendEmail(email, 'Verify Your Email', emailContent);
         logger.info(`Verification email sent to: ${email}`);
     } catch (error) {
         logger.error(`Error sending verification email: ${error.message}`);
-        await User.findByIdAndDelete(newUser._id); // Delete the user if email sending fails
-        logger.info(`User with ID: ${newUser._id} deleted due to email sending failure`);
-        throw new Error('Error sending verification email');
+        await newUser.deleteOne(); // Delete the user if email sending fails
+        throw new AppError('Error sending verification email', 500);
     }
 
     return { id: newUser._id, email: newUser.email };
@@ -70,41 +62,32 @@ export const registerUser = async ({ name, email, password, phoneNumber, role })
  * @param {string} loginDetails.email - The email of the user.
  * @param {string} loginDetails.password - The password of the user.
  * @returns {Promise<Object>} The login result containing success status, token, and refresh token.
- * @throws {Error} If there is an error during the login process.
+ * @throws {AppError} If the email or password is invalid.
  */
 export const loginUser = async ({ email, password }) => {
     logger.info('Login attempt', { email });
 
-    try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            logger.warn('User not found', { email });
-            return { success: false, message: 'Email not found' };
-        }
-
-        logger.debug('Stored hashed password', { userId: user._id });
-
-        const isValidPassword = await bcrypt.compare(password.trim(), user.password);
-        logger.debug('Password valid', { isValidPassword });
-
-        if (!isValidPassword) {
-            logger.warn('Invalid password attempt', { email });
-            return { success: false, message: 'Invalid password' };
-        }
-
-        if (!user.isVerified) {
-            logger.warn('Unverified email attempt', { email });
-            return { success: false, message: 'Please verify your email before logging in' };
-        }
-
-        const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
-        const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
-
-        return { success: true, token, refreshToken };
-    } catch (error) {
-        logger.error('Login error', { message: error.message });
-        return { success: false, message: error.message };
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) {
+        logger.warn('User not found', { email });
+        throw new AppError('Invalid email or password', 401);
     }
+
+    const isValidPassword = await user.isPasswordValid(password);
+    if (!isValidPassword) {
+        logger.warn('Invalid password attempt', { email });
+        throw new AppError('Invalid email or password', 401);
+    }
+
+    if (!user.isVerified) {
+        logger.warn('Unverified email attempt', { email });
+        throw new AppError('Please verify your email before logging in', 403);
+    }
+
+    const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
+    const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
+
+    return { success: true, token, refreshToken };
 };
 
 /**
@@ -117,24 +100,22 @@ export const loginUser = async ({ email, password }) => {
 export const requestPasswordReset = async (email) => {
     logger.info('Password reset request initiated', { email });
 
-    const user = await User.findOne({ email });
+    const user = await User.findByEmail(email);
     if (!user) {
         logger.warn('User not found for password reset', { email });
-        return;
+        return; // Avoid exposing whether the email exists
     }
 
-    const resetToken = generateToken({ userId: user._id }, TOKEN_TYPES.RESET);
+    const resetToken = generateToken({ userId: user.id }, TOKEN_TYPES.RESET);
     const resetLink = `${process.env.BASE_URL}/api/auth/reset-password?token=${resetToken}`;
     const emailContent = createPasswordResetTemplate(user.name, resetLink);
 
-    logger.debug('Password reset email content created', { resetLink });
-
     try {
-        await sendEmail(email, 'Password Reset Request', emailContent);
+        await sendEmail(user.email, 'Password Reset Request', emailContent);
         logger.info('Password reset email sent', { email });
     } catch (error) {
         logger.error('Error sending password reset email', { message: error.message });
-        throw new Error('Error sending password reset email');
+        throw new AppError('Error sending password reset email', 500);
     }
 };
 
@@ -144,33 +125,28 @@ export const requestPasswordReset = async (email) => {
  * @param {string} token - The password reset token.
  * @param {string} newPassword - The new password.
  * @returns {Promise<void>}
- * @throws {Error} If the token is missing, invalid, or if there is an error during the password reset process.
+ * @throws {AppError} If the token is invalid or if there is an error during the password reset process.
  */
 export const resetPassword = async (token, newPassword) => {
     logger.info('Password reset attempt initiated');
 
-    try {
-        if (!token) {
-            logger.error('Token is missing');
-            throw new Error('Token is missing');
-        }
-
-        const decoded = verifyToken(token, TOKEN_TYPES.RESET);
-        logger.debug('Token verified', { userId: decoded.userId });
-
-        const user = await User.findById(decoded.userId);
-        if (!user) {
-            logger.warn('User not found for password reset', { userId: decoded.userId });
-            throw new Error('User not found');
-        }
-
-        user.password = await bcrypt.hash(newPassword, 10); // Securely hash the new password
-        await user.save();
-        logger.info('Password reset successfully', { userId: user._id });
-    } catch (error) {
-        logger.error('Error during password reset', { message: error.message });
-        throw error;
+    if (!token) {
+        logger.error('Token is missing');
+        throw new AppError('Token is missing', 400);
     }
+
+    const decoded = verifyToken(token, TOKEN_TYPES.RESET);
+    logger.debug('Token verified', { userId: decoded.userId });
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+        logger.warn('User not found for password reset', { userId: decoded.userId });
+        throw new AppError('User not found', 404);
+    }
+
+    user.password = newPassword;
+    await user.save();
+    logger.info('Password reset successfully', { userId: user._id });
 };
 
 /**
@@ -185,31 +161,25 @@ export const verifyEmail = async (token) => {
 
     try {
         const decoded = verifyToken(token, TOKEN_TYPES.VERIFY);
-        logger.debug('Token verified', { userId: decoded.userId });
-
-        if (!decoded) {
-            logger.error('Invalid or expired token');
-            throw new Error('Invalid or expired token');
-        }
-
         const user = await User.findById(decoded.userId);
+
         if (!user) {
             logger.warn('User not found for email verification', { userId: decoded.userId });
-            throw new Error('User not found');
+            throw new AppError('User not found', 404);
         }
 
         if (user.isVerified) {
-            logger.warn('Email already verified', { userId: user._id });
-            throw new Error('Email already verified');
+            logger.warn('Email already verified', { userId: user.id });
+            throw new AppError('Email already verified', 400);
         }
 
         user.isVerified = true;
-
         await user.save();
-        logger.info('Email verified successfully', { userId: user._id });
+
+        logger.info('Email verified successfully', { userId: user.id });
     } catch (error) {
         logger.error('Error during email verification', { message: error.message });
-        throw error;
+        throw new AppError(error.message, 400);
     }
 };
 
@@ -224,11 +194,9 @@ export const validateResetToken = (token) => {
     logger.info('Password reset token validation initiated');
 
     if (!token) {
-        logger.error('Token is missing');
-        throw new Error('Token is missing');
+        throw new AppError('Token is missing', 400);
     }
 
-    logger.debug('Validating reset token', { token });
     return verifyToken(token, TOKEN_TYPES.RESET);
 };
 
@@ -240,13 +208,13 @@ export const validateResetToken = (token) => {
  * @returns {Promise<void>} A promise that resolves when the OTP has been sent.
  */
 export const requestEmailVerificationOtp = async (email) => {
-    const user = await User.findOne({ email });
+    const user = await User.findByEmail(email);
     if (!user) {
-        throw new Error('User not found');
+        throw new AppError('User not found', 404);
     }
 
     const otp = generateOtp();
-    await saveOtp(user._id, otp);
+    await saveOtp(user.id, otp);
 
     const subject = 'Your OTP Code';
     const htmlContent = `<p>Your OTP code is ${otp}</p>`;
@@ -265,16 +233,17 @@ export const requestEmailVerificationOtp = async (email) => {
 export const requestPhoneVerificationOtp = async (phoneNumber) => {
     const user = await User.findOne({ phoneNumber });
     if (!user) {
-        throw new Error('User not found');
+        throw new AppError('User not found', 404);
     }
 
     const otp = generateOtp();
-    await saveOtp(user._id, otp);
+    await saveOtp(user.id, otp);
 
     const message = `Your OTP code is ${otp}`;
-    await sendSms(user.phoneNumber, message);
+    await sendSms(phoneNumber, message);
+
     logger.info(`OTP sent to ${phoneNumber}`);
-}
+};
 
 /**
  * Verifies the OTP (One Time Password) for a given email.
@@ -285,12 +254,13 @@ export const requestPhoneVerificationOtp = async (phoneNumber) => {
  * @returns {Promise<void>} A promise that resolves when the email is successfully verified.
  */
 export const verifyEmailOtp = async (email, otp) => {
-    const user = await User.findOne({ email });
+    const user = await User.findByEmail(email);
     if (!user) {
-        throw new Error('User not found');
+        throw new AppError('User not found', 404);
     }
 
-    await verifyOtp(user._id, otp);
+    await verifyOtp(user.id, otp);
+
     user.isVerified = true;
     await user.save();
 
@@ -305,17 +275,18 @@ export const verifyEmailOtp = async (email, otp) => {
  * @throws {Error} If the user is not found or OTP verification fails.
  * @returns {Promise<void>} A promise that resolves when the phone number is successfully verified.
  */
-export const verifyPhoneOtp = async (phone, otp) => {
-    const user = await User.findOne({ phone });
+export const verifyPhoneOtp = async (phoneNumber, otp) => {
+    const user = await User.findOne({ phoneNumber });
     if (!user) {
-        throw new Error('User not found');
+        throw new AppError('User not found', 404);
     }
 
-    await verifyOtp(user._id, otp);
+    await verifyOtp(user.id, otp);
+
     user.isVerified = true;
     await user.save();
 
-    logger.info(`Phone number verified for ${phone}`);
+    logger.info(`Phone number verified for ${phoneNumber}`);
 };
 
 /**
