@@ -1,51 +1,58 @@
 import { verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
-import User from '../models/User.js'; // Adjust the path to your User model
+import User from '../models/User.js';
+import AppError from '../utils/AppError.js';
+import logger from '../config/logger.js';
 
-/**
- * Middleware to authenticate a user based on a provided JWT token.
- *
- * @param {Object} req - The request object.
- * @param {Object} req.header - The headers of the request.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * @returns {Object} - Returns a 401 status with an error message if authentication fails.
- * @throws {Error} - Throws an error if token verification fails.
- */
 export const authenticated = async (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-
-    if (!token) {
-        return res.status(401).json({ success: false, message: 'No token provided' });
-    }
-
     try {
-        const decoded = verifyToken(token, TOKEN_TYPES.ACCESS);
+        const token = req.header('Authorization')?.replace('Bearer ', '');
 
+        if (!token) {
+            throw new AppError('No token provided', 401);
+        }
+
+        const decoded = verifyToken(token, TOKEN_TYPES.ACCESS);
         const user = await User.findById(decoded.userId);
 
         if (!user) {
-            console.log('User not found');
-            return res.status(401).json({ success: false, message: 'User not found' });
+            logger.warn('User not found with token', { userId: decoded.userId });
+            throw new AppError('User not found', 401);
         }
 
         req.user = user;
+        logger.info('User authenticated', { userId: user.id });
         next();
     } catch (error) {
-        console.log('Token verification failed:', error.message);
-        res.status(401).json({ success: false, message: error.message });
+        logger.error('Authentication failed', { error: error.message });
+        next(new AppError(error.message, 401));
     }
 };
 
-/**
- * Middleware to check if the user's role is authorized.
- * 
- * @param {string[]} roles - Array of roles that are allowed access.
- * @returns {Function} Middleware function to check the user's role.
- */
 export const authorized = (roles) => (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-        return res.status(403).json({ success: false, message: 'Access denied' });
-    }
-    next();
-};
+    try {
+        if (!req.user) {
+            throw new AppError('User not authenticated', 401);
+        }
 
+        if (!Array.isArray(roles)) {
+            throw new AppError('Roles must be an array', 500);
+        }
+
+        if (!roles.includes(req.user.role)) {
+            logger.warn('Unauthorized access attempt', {
+                userId: req.user.id,
+                requiredRoles: roles,
+                userRole: req.user.role
+            });
+            throw new AppError('Access denied', 403);
+        }
+
+        logger.info('Access authorized', {
+            userId: req.user.id,
+            role: req.user.role
+        });
+        next();
+    } catch (error) {
+        next(error);
+    }
+};

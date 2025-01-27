@@ -1,6 +1,7 @@
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
+import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js';
 import profileRoutes from './routes/profile.routes.js';
 import { swaggerSpec, swaggerUi } from './config/swagger.js';
 import express from 'express';
@@ -61,6 +62,12 @@ app.use('/api/user-management', userRoutes);
  * Route to handle profile-related requests.
  */
 app.use('/api/profile-management', profileRoutes);
+
+// Handle 404 errors
+app.use(notFoundHandler);
+
+// Global error handler
+app.use(errorHandler);
 
 console.log('App initialized and routes set up');
 
