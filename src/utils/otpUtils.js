@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import Otp from '../models/Otp.js';
+import AppError from '../utils/AppError.js';
 
 /**
  * Generates a 6-digit OTP (One-Time Password).
@@ -35,7 +36,7 @@ export const verifyOtp = async (userId, otp) => {
     const otpEntry = await Otp.findOne({ userId, otp });
 
     if (!otpEntry) {
-        throw new Error('Invalid or expired OTP');
+        throw new AppError('Invalid or expired OTP', 400);
     }
 
     if (otpEntry.otpExpiry < new Date()) {
