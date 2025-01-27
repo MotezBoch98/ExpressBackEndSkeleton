@@ -1,8 +1,9 @@
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
-import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js';
 import profileRoutes from './routes/profile.routes.js';
+import productRoutes from './routes/product.routes.js';
+import { errorHandler, notFoundHandler } from './middlewares/error.middleware.js';
 import { swaggerSpec, swaggerUi } from './config/swagger.js';
 import express from 'express';
 import dotenv from 'dotenv';
@@ -62,6 +63,11 @@ app.use('/api/user-management', userRoutes);
  * Route to handle profile-related requests.
  */
 app.use('/api/profile-management', profileRoutes);
+
+/**
+ * Route to handle profile-related requests.
+ */
+app.use('/api/product-management', productRoutes);
 
 // Handle 404 errors
 app.use(notFoundHandler);
