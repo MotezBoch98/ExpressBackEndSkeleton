@@ -1,6 +1,7 @@
 import express from 'express';
-import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp } from '../controllers/auth.controller.js';
+import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp, me } from '../controllers/auth.controller.js';
 import validate from '../middlewares/validate.middleware.js';
+import { authenticated } from '../middlewares/auth.middleware.js';
 import { registerUserSchema, loginUserSchema } from '../validations/user.validation.js';
 
 const router = express.Router();
@@ -139,6 +140,37 @@ router.post('/login', validate(loginUserSchema), login);
  *         description: Invalid or expired token
  */
 router.get('/verify-email', verifyEmail);
+
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Get current authenticated user
+ *     description: Returns the authenticated user's details.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user information.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/me', authenticated, me);
 
 /**
  * @swagger

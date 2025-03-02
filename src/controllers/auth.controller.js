@@ -54,6 +54,23 @@ export const login = async (req, res) => {
 };
 
 /**
+ * Returns the currently authenticated user's information.
+ *
+ * @param {Object} req - Express request object; `req.user` is populated by the auth middleware.
+ * @param {Object} res - Express response object.
+ * @returns {void}
+ */
+export const me = (req, res) => {
+    // If using Mongoose, convert the document to an object to remove sensitive fields
+    const userData = req.user.toObject ? req.user.toObject() : req.user;
+    
+    // Remove sensitive fields like the password
+    delete userData.password;
+  
+    res.status(200).json({ success: true, data: { user: userData } });
+  };
+
+/**
  * Verifies a user's email.
  * 
  * @param {Object} req - The request object.

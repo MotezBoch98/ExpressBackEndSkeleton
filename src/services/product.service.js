@@ -134,3 +134,58 @@ export const getFeaturedProducts = async () => {
         throw new AppError('Failed to fetch featured products', 500);
     }
 };
+
+/**
+ * Adds a review to a product
+ * @param {string} productId - Product ID
+ * @param {Object} review - Review data
+ * @returns {Promise<Product>}
+ */
+export const addReview = async (productId, review) => {
+    logger.info(`Adding review to product with id: ${productId}`);
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+        return await product.addReview(review);
+    } catch (error) {
+        logger.error('Adding review failed', { error: error.message });
+        throw new AppError(error.message, error.statusCode || 500);
+    }
+};
+
+/**
+ * Removes a review from a product
+ * @param {string} productId - Product ID
+ * @param {string} reviewId - Review ID
+ * @returns {Promise<Product>}
+ */
+export const removeReview = async (productId, reviewId) => {
+    logger.info(`Removing review from product with id: ${productId}`);
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+        return await product.removeReview(reviewId);
+    } catch (error) {
+        logger.error('Removing review failed', { error: error.message });
+        throw new AppError(error.message, error.statusCode || 500);
+    }
+};
+
+/**
+ * Searches products by title
+ * @param {string} title - Product title
+ * @returns {Promise<Array<Product>>}
+ */
+export const searchProductsByTitle = async (title) => {
+    logger.info(`Searching products with title: ${title}`);
+    try {
+        return await Product.searchByTitle(title);
+    } catch (error) {
+        logger.error('Product search failed', { error: error.message });
+        throw new AppError('Failed to search products', 500);
+    }
+};

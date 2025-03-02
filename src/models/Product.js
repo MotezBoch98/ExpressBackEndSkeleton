@@ -144,6 +144,41 @@ productSchema.methods = {
         if (this.stock === 0) return 'Out of Stock';
         if (this.stock < 5) return 'Low Stock';
         return 'In Stock';
+    },
+
+    /**
+     * Adds a review to the product.
+     * 
+     * @function addReview
+     * @memberof Product
+     * @instance
+     * @param {Object} review - The review object containing rating and comment.
+     * @returns {Promise<Product>} The updated product document.
+     */
+    addReview: function (review) {
+        this.reviews.push(review);
+        return this.updateAverageRating(review.rating);
+    },
+
+    /**
+     * Removes a review from the product.
+     * 
+     * @function removeReview
+     * @memberof Product
+     * @instance
+     * @param {string} reviewId - The ID of the review to be removed.
+     * @returns {Promise<Product>} The updated product document.
+     */
+    removeReview: function (reviewId) {
+        const reviewIndex = this.reviews.findIndex(review => review._id.toString() === reviewId);
+        if (reviewIndex !== -1) {
+            const [removedReview] = this.reviews.splice(reviewIndex, 1);
+            this.numReviews -= 1;
+            this.ratings = this.numReviews > 0 ? 
+                ((this.ratings * (this.numReviews + 1)) - removedReview.rating) / this.numReviews : 0;
+            return this.save();
+        }
+        throw new Error('Review not found');
     }
 };
 
@@ -171,6 +206,19 @@ productSchema.statics = {
      */
     findByCategory: function (category) {
         return this.find({ category });
+    },
+
+    /**
+     * Searches products by title.
+     * 
+     * @function searchByTitle
+     * @memberof Product
+     * @static
+     * @param {string} title - The title to search for.
+     * @returns {Promise<Array<Product>>} An array of products matching the title.
+     */
+    searchByTitle: function (title) {
+        return this.find({ title: new RegExp(title, 'i') });
     }
 };
 
