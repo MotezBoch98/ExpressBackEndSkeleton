@@ -19,7 +19,7 @@ const app = express();
  * Middleware to enable CORS.
  */
 app.use(cors({
-    origin: 'http://localhost:5000',
+    origin: 'http://localhost:3000',
     credentials: true
 }));
 
@@ -62,7 +62,7 @@ app.use('/api/user-management', userRoutes);
 /**
  * Route to handle profile-related requests.
  */
-app.use('/api/profile-management', profileRoutes);
+app.use('/api/profile', profileRoutes);
 
 /**
  * Route to handle profile-related requests.

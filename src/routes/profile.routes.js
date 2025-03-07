@@ -43,7 +43,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
-router.get('/profile', authenticated, fetchProfile);
+router.get('/', authenticated, fetchProfile);
 
 /**
  * @swagger
@@ -88,6 +88,6 @@ router.get('/profile', authenticated, fetchProfile);
  *       500:
  *         description: Internal server error
  */
-router.put('/profile', authenticated, validate(updateUserSchema), modifyProfile);
+router.put('/', authenticated, validate(updateUserSchema), modifyProfile);
 
 export default router;
