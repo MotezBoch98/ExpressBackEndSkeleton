@@ -23,14 +23,38 @@ const userSchema = new mongoose.Schema(
       unique: true,
       match: [/.+@.+\..+/, 'Please provide a valid email address'],
     },
-    password: { type: String, required: true },
-    isVerified: { type: Boolean, default: false },
-    phoneNumber: { type: String, unique: true, sparse: true },
+    password: {
+      type: String,
+      required: function () {
+        return this.provider === 'local'; // Conditional requirement
+      }
+    },
+    provider: {
+      type: String,
+      enum: ['local', 'google', 'facebook'],
+      default: 'local',
+      required: true
+    },
+    providerId: {
+      type: String,
+      unique: true,
+      sparse: true // Allows null for local users
+    },
+    isVerified: {
+      type: Boolean,
+      default: function () {
+        return this.provider !== 'local'; // Auto-verify social logins
+      }
+    },
+    phoneNumber: {
+      type: String,
+      sparse: true // Remove unique if you want to allow nulls
+    },
     role: {
       type: String,
       enum: ['client', 'admin', 'delivery'],
-      default: 'client',
-    },
+      default: 'client'
+    }
   },
   {
     timestamps: true,
@@ -43,12 +67,72 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Indexes for faster querying
+userSchema.index({ provider: 1, providerId: 1 }, { unique: true, sparse: true });
+
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre('save', function (next) {
+  // Only hash password for local users when modified
+  if (this.provider === 'local' && !this.isModified('password')) { return next(); }
+  this.password = bcrypt.hash(this.password, 10);
   next();
 });
+
+// Custom validation for social auth users
+userSchema.pre('validate', function (next) {
+  if (this.provider !== 'local') {
+    this.isVerified = true; // Auto-verify social logins
+    if (this.password) {
+      this.invalidate('password', 'Social auth users should not have passwords');
+    }
+  }
+  next();
+});
+
+
+// Static Methods
+userSchema.statics = {
+  /**
+   * Find a user by email
+   * @param {string} email - The email to search for
+   * @returns {Promise<User>} The user object if found
+  */
+  findByEmail: function (email) {
+    return this.findOne({ email });
+  },
+  findOrCreateSocialUser: async function (profile) {
+    const { provider, id: providerId } = profile;
+    const email = profile.emails?.[0]?.value;
+
+    // Check existing user
+    const existingUser = await this.findOne({
+      $or: [
+        { provider, providerId },
+        { email }
+      ]
+    });
+
+    if (existingUser) {
+      if (!existingUser.providerId) {
+        // Merge accounts if email exists but no social ID
+        existingUser.provider = provider;
+        existingUser.providerId = providerId;
+        await existingUser.save();
+      }
+      return existingUser;
+    }
+
+    // Create new social user
+    return this.create({
+      name: profile.displayName,
+      email,
+      provider,
+      providerId,
+      isVerified: true
+    });
+  }
+
+};
 
 // Instance Methods
 userSchema.methods = {
@@ -58,19 +142,10 @@ userSchema.methods = {
    * @returns {Promise<boolean>} True if passwords match
    */
   isPasswordValid: function (inputPassword) {
+    if (this.provider !== 'local') {
+      throw new Error('Password authentication not available for social users');
+    }
     return bcrypt.compare(inputPassword, this.password);
-  },
-};
-
-// Static Methods
-userSchema.statics = {
-  /**
-   * Find a user by email
-   * @param {string} email - The email to search for
-   * @returns {Promise<User>} The user object if found
-   */
-  findByEmail: function (email) {
-    return this.findOne({ email });
   },
 };
 

@@ -1,5 +1,6 @@
 import express from 'express';
-import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp, me } from '../controllers/auth.controller.js';
+import passport from '../config/passport.js';
+import { register, login, requestPasswordReset, resetPassword, verifyEmail, showResetPasswordForm, requestEmailVerificationOtp, verifyEmailOtp, requestPhoneVerificationOtp, verifyPhoneOtp, me, oauthCallback } from '../controllers/auth.controller.js';
 import validate from '../middlewares/validate.middleware.js';
 import { authenticated } from '../middlewares/auth.middleware.js';
 import { registerUserSchema, loginUserSchema } from '../validations/user.validation.js';
@@ -403,5 +404,74 @@ router.post('/request-phone-otp', requestPhoneVerificationOtp);
  *         description: Internal server error
  */
 router.post('/verify-phone-otp', verifyPhoneOtp);
+
+// Google OAuth routes
+
+/**
+ * @swagger
+ * /api/auth/google:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google OAuth login
+ *     description: Redirects the user to Google for authentication.
+ *     responses:
+ *       302:
+ *         description: Redirect to Google for authentication
+ */
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: true }));
+
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google OAuth callback
+ *     description: Handles the callback from Google after authentication.
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated with Google
+ *       302:
+ *         description: Redirect to login on failure
+ */
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), oauthCallback);
+
+// Added failure endpoint for testing
+router.get('/failure', (req, res) => {
+    res.status(401).json({ success: false, message: 'Authentication failed' });
+});
+
+// Facebook OAuth routes
+
+/**
+ * @swagger
+ * /api/auth/facebook:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Facebook OAuth login
+ *     description: Redirects the user to Facebook for authentication.
+ *     responses:
+ *       302:
+ *         description: Redirect to Facebook for authentication
+ */
+router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+
+/**
+ * @swagger
+ * /api/auth/facebook/callback:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Facebook OAuth callback
+ *     description: Handles the callback from Facebook after authentication.
+ *     responses:
+ *       200:
+ *         description: Successfully authenticated with Facebook
+ *       302:
+ *         description: Redirect to login on failure
+ */
+router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), oauthCallback);
 
 export default router;

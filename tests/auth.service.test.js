@@ -31,7 +31,12 @@ describe('Auth Service', () => {
             const result = await authService.registerUser(userData);
 
             expect(User.exists).toHaveBeenCalledWith({ email: 'test@example.com' });
-            expect(User.create).toHaveBeenCalledWith(expect.objectContaining(userData));
+            expect(User.create).toHaveBeenCalledWith(expect.objectContaining({
+                ...userData,
+                password: expect.any(String), // Password will be hashed
+                provider: 'local', // Default value
+                role: 'client' // Default value
+            }));
             expect(generateToken).toHaveBeenCalledWith({ userId: 'userId' }, TOKEN_TYPES.VERIFY);
             expect(sendEmail).toHaveBeenCalledWith('test@example.com', 'Verify Your Email', 'emailContent');
             expect(result).toEqual({ id: 'userId', email: 'test@example.com' });
@@ -72,11 +77,12 @@ describe('Auth Service', () => {
         });
 
         it('should login successfully with valid credentials', async () => {
-            const mockUser = { 
-                _id: 'userId', 
-                email: 'test@example.com', 
-                isVerified: true, 
-                isPasswordValid: jest.fn().mockResolvedValue(true) 
+            const mockUser = {
+                _id: 'userId',
+                email: 'test@example.com',
+                provider: 'local',
+                isVerified: true,
+                isPasswordValid: jest.fn().mockResolvedValue(true)
             };
             User.findOne.mockReturnValue({
                 select: jest.fn().mockResolvedValue(mockUser)
@@ -105,11 +111,12 @@ describe('Auth Service', () => {
         });
 
         it('should throw error if password is invalid', async () => {
-            const mockUser = { 
-                _id: 'userId', 
-                email: 'test@example.com', 
-                isVerified: true, 
-                isPasswordValid: jest.fn().mockResolvedValue(false) 
+            const mockUser = {
+                _id: 'userId',
+                email: 'test@example.com',
+                provider: 'local',
+                isVerified: true,
+                isPasswordValid: jest.fn().mockResolvedValue(false)
             };
             User.findOne = jest.fn().mockReturnValue({
                 select: jest.fn().mockResolvedValue(mockUser)
@@ -122,11 +129,12 @@ describe('Auth Service', () => {
         });
 
         it('should throw error if email is not verified', async () => {
-            const mockUser = { 
-                _id: 'userId', 
-                email: 'test@example.com', 
-                isVerified: false, 
-                isPasswordValid: jest.fn().mockResolvedValue(true) 
+            const mockUser = {
+                _id: 'userId',
+                email: 'test@example.com',
+                provider: 'local',
+                isVerified: false,
+                isPasswordValid: jest.fn().mockResolvedValue(true)
             };
             User.findOne = jest.fn().mockReturnValue({
                 select: jest.fn().mockResolvedValue(mockUser)
@@ -136,6 +144,23 @@ describe('Auth Service', () => {
 
             await expect(authService.loginUser(credentials)).rejects.toThrow('Please verify your email before logging in');
             expect(mockUser.isPasswordValid).toHaveBeenCalledWith('password');
+        });
+
+        it('should throw error for social auth user trying password login', async () => {
+            const mockUser = {
+                _id: 'userId',
+                email: 'test@example.com',
+                provider: 'google', // Social provider
+                isVerified: true,
+                isPasswordValid: jest.fn().mockResolvedValue(true)
+            };
+
+            User.findOne = jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue(mockUser)
+            });
+
+            const credentials = { email: 'test@example.com', password: 'password' };
+            await expect(authService.loginUser(credentials)).rejects.toThrow('Please use google login');
         });
     });
 
@@ -153,7 +178,7 @@ describe('Auth Service', () => {
             expect(User.findByEmail).toHaveBeenCalledWith('test@example.com');
             expect(generateToken).toHaveBeenCalledWith({ userId: 'userId' }, TOKEN_TYPES.RESET);
             expect(createPasswordResetTemplate).toHaveBeenCalledWith(
-                'Test User', 
+                'Test User',
                 'http://localhost:5000/api/auth/reset-password?token=resetToken'
             );
             expect(sendEmail).toHaveBeenCalledWith('test@example.com', 'Password Reset Request', 'resetEmailContent');

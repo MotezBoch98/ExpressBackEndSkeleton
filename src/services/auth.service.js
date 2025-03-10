@@ -6,6 +6,7 @@ import { generateToken, verifyToken, TOKEN_TYPES } from '../utils/jwtUtils.js';
 import { generateOtp, saveOtp, verifyOtp, cleanUpExpiredOtps } from '../utils/otpUtils.js';
 import logger from '../config/logger.js';
 import AppError from '../utils/AppError.js';
+import bcrypt from 'bcrypt';
 
 /**
  * Registers a new user.
@@ -18,7 +19,7 @@ import AppError from '../utils/AppError.js';
  * @returns {Promise<Object>} The registered user details.
  * @throws {AppError} If the email is already registered or there is an error during registration.
  */
-export const registerUser = async ({ name, email, password, phoneNumber, role }) => {
+export const registerUser = async ({ name, email, password, phoneNumber, provider, role }) => {
     logger.info('Registering a new user');
 
     if (await User.exists({ email })) {
@@ -26,17 +27,20 @@ export const registerUser = async ({ name, email, password, phoneNumber, role })
         throw new AppError('Email already registered', 400);
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
     const newUser = await User.create({
         name,
         email,
-        password,
+        password: hashedPassword,
         phoneNumber,
+        provider: provider || 'local',
         role: role || 'client'
     });
 
     logger.info(`User created with ID: ${newUser._id}`);
 
-    const verificationToken = generateToken({ userId: newUser._id }, TOKEN_TYPES.VERIFY);
+    const verificationToken = generateTokenService({ userId: newUser._id }, TOKEN_TYPES.VERIFY);
     logger.debug(`Generated verification token: ${verificationToken}`);
 
     const verificationLink = `${process.env.BASE_URL}/api/auth/verify-email?token=${verificationToken}`;
@@ -66,10 +70,19 @@ export const registerUser = async ({ name, email, password, phoneNumber, role })
 export const loginUser = async ({ email, password }) => {
     logger.info('Login attempt', { email });
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select('+password +provider');
     if (!user) {
         logger.warn('User not found', { email });
         throw new AppError('Invalid email or password', 401);
+    }
+
+    // Handle social auth users trying to use password login
+    if (user.provider !== 'local') {
+        logger.warn('Invalid authentication method', {
+            email,
+            provider: user.provider
+        });
+        throw new AppError(`Please use ${user.provider} login`, 403);
     }
 
     const isValidPassword = await user.isPasswordValid(password);
@@ -83,8 +96,8 @@ export const loginUser = async ({ email, password }) => {
         throw new AppError('Please verify your email before logging in', 403);
     }
 
-    const token = generateToken({ userId: user._id }, TOKEN_TYPES.ACCESS);
-    const refreshToken = generateToken({ userId: user._id }, TOKEN_TYPES.REFRESH);
+    const token = generateTokenService({ userId: user._id }, TOKEN_TYPES.ACCESS);
+    const refreshToken = generateTokenService({ userId: user._id }, TOKEN_TYPES.REFRESH);
 
     return { success: true, token, refreshToken };
 };
@@ -105,7 +118,7 @@ export const requestPasswordReset = async (email) => {
         return; // Avoid exposing whether the email exists
     }
 
-    const resetToken = generateToken({ userId: user.id }, TOKEN_TYPES.RESET);
+    const resetToken = generateTokenService({ userId: user.id }, TOKEN_TYPES.RESET);
     const resetLink = `${process.env.BASE_URL}/api/auth/reset-password?token=${resetToken}`;
     const emailContent = createPasswordResetTemplate(user.name, resetLink);
 
@@ -134,7 +147,7 @@ export const resetPassword = async (token, newPassword) => {
         throw new AppError('Token is missing', 400);
     }
 
-    const decoded = verifyToken(token, TOKEN_TYPES.RESET);
+    const decoded = verifyTokenService(token, TOKEN_TYPES.RESET);
     logger.debug('Token verified', { userId: decoded.userId });
 
     const user = await User.findById(decoded.userId);
@@ -159,7 +172,7 @@ export const verifyEmail = async (token) => {
     logger.info('Email verification attempt initiated');
 
     try {
-        const decoded = verifyToken(token, TOKEN_TYPES.VERIFY);
+        const decoded = verifyTokenService(token, TOKEN_TYPES.VERIFY);
         const user = await User.findById(decoded.userId);
 
         if (!user) {
@@ -196,7 +209,7 @@ export const validateResetToken = (token) => {
         throw new AppError('Token is missing', 400);
     }
 
-    return verifyToken(token, TOKEN_TYPES.RESET);
+    return verifyTokenService(token, TOKEN_TYPES.RESET);
 };
 
 /**
@@ -299,4 +312,26 @@ export const verifyPhoneOtp = async (phoneNumber, otp) => {
 export const cleanUpOtps = async () => {
     await cleanUpExpiredOtps();
     logger.info('Expired OTPs cleaned up');
+};
+
+/**
+ * Generates a token for the user.
+ * 
+ * @param {Object} payload - The payload to include in the token.
+ * @param {string} type - The type of token to generate.
+ * @returns {string} The generated token.
+ */
+export const generateTokenService = (payload, type) => {
+    return generateToken(payload, type);
+};
+
+/**
+ * Verifies the provided token based on the specified type.
+ *
+ * @param {string} token - The token to be verified.
+ * @param {string} type - The type of the token.
+ * @returns {boolean} - Returns true if the token is valid, otherwise false.
+ */
+export const verifyTokenService = (token, type) => {
+    return verifyToken(token, type);
 };

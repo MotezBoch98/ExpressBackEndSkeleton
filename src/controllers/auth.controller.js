@@ -1,4 +1,5 @@
 import * as authService from '../services/auth.service.js';
+import { TOKEN_TYPES } from '../utils/jwtUtils.js';
 import logger from '../config/logger.js';
 
 /**
@@ -14,10 +15,8 @@ import logger from '../config/logger.js';
  * @returns {Promise<void>}
  */
 export const register = async (req, res) => {
-    logger.info('Registering a new user');
     try {
         const user = await authService.registerUser(req.body);
-        logger.info('User registered successfully', { userId: user._id });
         res.status(201).json({ success: true, data: user });
     } catch (error) {
         logger.error('Error registering user', { error: error.message });
@@ -63,12 +62,12 @@ export const login = async (req, res) => {
 export const me = (req, res) => {
     // If using Mongoose, convert the document to an object to remove sensitive fields
     const userData = req.user.toObject ? req.user.toObject() : req.user;
-    
+
     // Remove sensitive fields like the password
     delete userData.password;
-  
+
     res.status(200).json({ success: true, data: { user: userData } });
-  };
+};
 
 /**
  * Verifies a user's email.
@@ -307,3 +306,41 @@ export const verifyPhoneOtp = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+// Existing controller methods...
+
+
+export const oauthCallback = async (req, res) => {
+    try {
+      if (!req.user) {
+        logger.error('OAuth failure - no user in session');
+        return res.redirect(`${process.env.CLIENT_URL}/login?error=auth_failed`);
+      }
+  
+      // Generate simple token for API access
+      const token = authService.generateTokenService(
+        { userId: req.user._id },
+        TOKEN_TYPES.ACCESS
+      );
+  
+      // For API clients
+      if (req.accepts('json')) {
+        return res.json({
+          success: true,
+          token,
+          user: {
+            id: req.user._id,
+            email: req.user.email,
+            name: req.user.name
+          }
+        });
+      }
+  
+      // For browser clients
+      res.redirect(`${process.env.CLIENT_URL}/auth-success?token=${token}`);
+  
+    } catch (error) {
+      logger.error('OAuth callback error:', error);
+      res.redirect(`${process.env.CLIENT_URL}/login?error=auth_failed`);
+    }
+  };

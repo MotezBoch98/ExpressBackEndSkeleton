@@ -15,7 +15,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/profile-management/profile:
+ * /api/profile:
  *   get:
  *     summary: Get the profile of the logged-in user
  *     tags: [Profile Management]
@@ -47,7 +47,7 @@ router.get('/', authenticated, fetchProfile);
 
 /**
  * @swagger
- * /api/profile-management/profile:
+ * /api/profile:
  *   put:
  *     summary: Update the profile of the logged-in user
  *     tags: [Profile Management]

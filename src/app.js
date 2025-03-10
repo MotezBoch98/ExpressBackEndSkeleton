@@ -9,6 +9,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import logger from './config/logger.js';
+import session from 'express-session';
+import passport from './config/passport.js';
+
 
 dotenv.config();
 connectDB();
@@ -19,15 +22,35 @@ const app = express();
  * Middleware to enable CORS.
  */
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: '*', // Allow all origins
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow specific methods
+    allowedHeaders: 'Content-Type,Authorization', // Allow specific headers
     credentials: true
 }));
+
+// Session configuration (must come before passport)
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true, // Changed for better session handling
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        sameSite: 'Lax', // Changed from 'strict'
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+// Initialize Passport (order is crucial!)
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * Middleware to log incoming requests.
  */
 app.use((req, res, next) => {
-    logger.info(`${req.method} ${req.url}`);
+    const { method, url, headers, body } = req;
+    logger.info(`Incoming Request: ${method} ${url} - Body: ${JSON.stringify(body)}`);
     next();
 });
 

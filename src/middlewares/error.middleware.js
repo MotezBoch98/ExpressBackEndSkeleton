@@ -1,35 +1,61 @@
 import logger from '../config/logger.js';
 import AppError from '../utils/AppError.js';
 
+// Helper to safely serialize errors
+const serializeError = (err) => {
+    if (err instanceof AppError) {
+        return {
+            message: err.message,
+            name: err.name,
+            statusCode: err.statusCode,
+            type: err.type,
+            stack: err.stack,
+            isOperational: err.isOperational
+        };
+    }
+
+    return {
+        message: err.message,
+        name: err.name || 'Error',
+        stack: err.stack,
+        type: 'unexpected_error'
+    };
+};
+
 /**
  * Global error handling middleware
  */
 export const errorHandler = (err, req, res, next) => {
-    // Log the error
-    logger.error('Error:', err.toJSON());
+    // Serialize error before logging
+    const errorDetails = serializeError(err);
 
-    // If it's a trusted error (operational), send error details
+    // Log with appropriate level
     if (err.isOperational) {
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-            type: err.type,
-            ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-        });
+        logger.warn('Operational error:', errorDetails);
+    } else {
+        logger.error('Unexpected error:', errorDetails);
     }
 
-    // For programming or unknown errors, send generic message in production
-    return res.status(500).json({
+    // Response formatting
+    const response = {
         success: false,
-        message: process.env.NODE_ENV === 'development' 
-            ? err.message 
-            : 'Something went wrong'
-    });
+        message: err.isOperational
+            ? err.message
+            : 'An unexpected error occurred'
+    };
+
+    // Add stack trace in development
+    if (process.env.NODE_ENV === 'development') {
+        response.stack = err.stack;
+        response.errorType = err.name;
+    }
+
+    res.status(err.statusCode || 500).json(response);
 };
 
 /**
  * 404 error handler for undefined routes
  */
 export const notFoundHandler = (req, res, next) => {
-    next(new AppError(`Route not found: ${req.originalUrl}`, 404, 'operational'));
+    next(new AppError(`Route not found: ${req.originalUrl}`, 404, 'route_not_found'));
 };
